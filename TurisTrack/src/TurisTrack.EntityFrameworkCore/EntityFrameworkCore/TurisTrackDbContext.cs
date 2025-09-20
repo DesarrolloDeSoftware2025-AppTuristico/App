@@ -12,6 +12,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using TurisTrack.DestinosTuristicos;
 
 namespace TurisTrack.EntityFrameworkCore;
 
@@ -22,7 +23,7 @@ public class TurisTrackDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
-
+    public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
 
     #region Entities from the modules
 
@@ -69,7 +70,7 @@ public class TurisTrackDbContext :
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureBlobStoring();
-        
+
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>
@@ -78,5 +79,22 @@ public class TurisTrackDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+
+        builder.Entity<DestinoTuristico>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "DestinosTuristicos", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.NumeroCalle).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Calle).IsRequired().HasMaxLength(500);
+            b.Property(x => x.Localidad).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Estado).IsRequired().HasMaxLength(200);
+            b.Property(x => x.CodigoPostal).IsRequired().HasMaxLength(50);
+            b.Property(x => x.Pais).IsRequired().HasMaxLength(200);
+            b.Property(x => x.DireccionFormateada).HasMaxLength(1000);
+            b.Property(x => x.Latitud).IsRequired();
+            b.Property(x => x.Longitud).IsRequired();
+            b.Property(x => x.TipoUbicacion).HasMaxLength(200);
+            b.Property(x => x.Foto).HasMaxLength(500);
+        });
     }
 }
