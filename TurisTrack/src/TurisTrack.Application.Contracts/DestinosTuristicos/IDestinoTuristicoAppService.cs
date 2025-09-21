@@ -7,9 +7,9 @@ using Volo.Abp.Application.Services;
 
 namespace TurisTrack.DestinosTuristicos
 {
-    public interface IDestinosAppService : IApplicationService
+    public interface IDestinoTuristicoAppService : IApplicationService
     {
-        Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string pais = null, string region = null);
+        Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null, int? poblacionMinima = null);
         Task<DestinoTuristicoDto> ObtenerPorIdAsync(Guid id);
         Task<List<DestinoTuristicoDto>> ListarPopularesAsync();
         Task<DestinoTuristicoDto> GuardarDestinoAsync(CreateUpdateDestinoTuristicoDto input);

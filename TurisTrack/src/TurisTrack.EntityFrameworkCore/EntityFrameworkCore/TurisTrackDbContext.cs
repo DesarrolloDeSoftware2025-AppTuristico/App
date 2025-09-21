@@ -25,6 +25,7 @@ public class TurisTrackDbContext :
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
 
+
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext 
@@ -84,17 +85,20 @@ public class TurisTrackDbContext :
         {
             b.ToTable(TurisTrackConsts.DbTablePrefix + "DestinosTuristicos", TurisTrackConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.NumeroCalle).IsRequired().HasMaxLength(200);
-            b.Property(x => x.Calle).IsRequired().HasMaxLength(500);
-            b.Property(x => x.Localidad).IsRequired().HasMaxLength(200);
-            b.Property(x => x.Estado).IsRequired().HasMaxLength(200);
-            b.Property(x => x.CodigoPostal).IsRequired().HasMaxLength(50);
+            b.Property(x => x.IdAPI).IsRequired();
+            b.Property(x => x.Tipo).IsRequired().HasMaxLength(100);
+            b.Property(x => x.Nombre).IsRequired().HasMaxLength(200);
             b.Property(x => x.Pais).IsRequired().HasMaxLength(200);
-            b.Property(x => x.DireccionFormateada).HasMaxLength(1000);
+            b.Property(x => x.CodigoPais).IsRequired(false).HasMaxLength(10);
+            b.Property(x => x.Region).IsRequired().HasMaxLength(100);
+            b.Property(x => x.CodigoRegion).IsRequired(false).HasMaxLength(10);
+            b.Property(x => x.MetrosDeElevacion);
             b.Property(x => x.Latitud).IsRequired();
             b.Property(x => x.Longitud).IsRequired();
-            b.Property(x => x.TipoUbicacion).HasMaxLength(200);
-            b.Property(x => x.Foto).HasMaxLength(500);
+            b.Property(x => x.Poblacion).IsRequired();
+            b.Property(x => x.ZonaHoraria).IsRequired(false).HasMaxLength(100);
+            b.Property(x => x.Foto).IsRequired(false).HasMaxLength(500);
+            b.Property(x => x.Eliminado);
         });
     }
 }

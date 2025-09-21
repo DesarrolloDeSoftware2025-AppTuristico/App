@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TurisTrack.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace TurisTrack.Migrations
 {
     [DbContext(typeof(TurisTrackDbContext))]
-    partial class TurisTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250921034325_Modifico tipo Guid por int del atributo IdAPI entidad DestinoTuristico")]
+    partial class ModificotipoGuidporintdelatributoIdAPIentidadDestinoTuristico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +33,12 @@ namespace TurisTrack.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CodigoPais")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("CodigoRegion")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -53,6 +58,7 @@ namespace TurisTrack.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<string>("Foto")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -92,6 +98,7 @@ namespace TurisTrack.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ZonaHoraria")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
