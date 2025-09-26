@@ -44,18 +44,18 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         /// 3.4 Guardar un destino en la base interna (SQL Server)
-        public async Task<SaveResultDto> GuardarDestinoAsync(int idApi)
+        public async Task<SaveResultDto> GuardarDestinoAsync(DestinoTuristicoDto destinoExterno) //int idApi)
         {
             // Buscar el destino en la API externa
-            var destinoExterno = await _geoDbService.ObtenerDestinoPorIdAsync(idApi);
+            //var destinoExterno = await _geoDbService.ObtenerDestinoPorIdAsync(idApi);
 
             if (destinoExterno == null)
             {
                 return new SaveResultDto
                 {
                     Success = false,
-                    Message = $"No se encontró el destino con Id {idApi}",
-                    IdApi = idApi
+                    Message = $"No se encontró el destino con Id {destinoExterno.IdAPI}", //idApi
+                    IdApi = destinoExterno.IdAPI //idApi
                 };
             }
 
@@ -71,7 +71,7 @@ namespace TurisTrack.DestinosTuristicos
                     Success = false,
                     Message = $"El destino '{destinoExterno.Nombre}' en {destinoExterno.Pais} ya existe en la base interna.",
                     IdInterno = existente.Id,
-                    IdApi = idApi
+                    IdApi = destinoExterno.IdAPI //idApi
                 };
             }
 
@@ -86,7 +86,7 @@ namespace TurisTrack.DestinosTuristicos
                 Success = true,
                 Message = "Destino guardado correctamente",
                 IdInterno = inserted.Id,
-                IdApi = idApi
+                IdApi = destinoExterno.IdAPI //idApi
             };
         }
 
@@ -141,12 +141,5 @@ namespace TurisTrack.DestinosTuristicos
         public bool Eliminado { get; set; }
     }
 
-    public class SaveResultDto
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public Guid? IdInterno { get; set; }
-        public int IdApi { get; set; }
-    }
 }
 

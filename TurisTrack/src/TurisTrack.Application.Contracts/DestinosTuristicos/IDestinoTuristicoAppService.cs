@@ -12,7 +12,7 @@ namespace TurisTrack.DestinosTuristicos
         Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null, int? poblacionMinima = null);
         Task<DestinoTuristicoDto> ObtenerPorIdAsync(Guid id);
         Task<List<DestinoTuristicoDto>> ListarPopularesAsync();
-        Task<DestinoTuristicoDto> GuardarDestinoAsync(CreateUpdateDestinoTuristicoDto input);
+        Task<SaveResultDto> GuardarDestinoAsync(DestinoTuristicoDto destinoExterno);
     }
 
 }
