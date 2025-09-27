@@ -49,16 +49,6 @@ namespace TurisTrack.DestinosTuristicos
             // Buscar el destino en la API externa
             //var destinoExterno = await _geoDbService.ObtenerDestinoPorIdAsync(idApi);
 
-            if (destinoExterno == null)
-            {
-                return new SaveResultDto
-                {
-                    Success = false,
-                    Message = $"No se encontró el destino con Id {destinoExterno.IdAPI}", //idApi
-                    IdApi = destinoExterno.IdAPI //idApi
-                };
-            }
-
             // Validar duplicados (Mismo Nombre y País)
             var existente = await _destinoRepository.FirstOrDefaultAsync(
                 d => d.Nombre == destinoExterno.Nombre && d.Pais == destinoExterno.Pais
@@ -66,13 +56,17 @@ namespace TurisTrack.DestinosTuristicos
 
             if (existente != null)
             {
-                return new SaveResultDto
-                {
-                    Success = false,
-                    Message = $"El destino '{destinoExterno.Nombre}' en {destinoExterno.Pais} ya existe en la base interna.",
-                    IdInterno = existente.Id,
-                    IdApi = destinoExterno.IdAPI //idApi
-                };
+                throw new BusinessException("TurisTrack:DestinoDuplicado")
+                    .WithData("Nombre", destinoExterno.Nombre)
+                    .WithData("Pais", destinoExterno.Pais)
+                    .WithData("Message", $"El destino '{destinoExterno.Nombre}' en {destinoExterno.Pais} ya existe en la base interna.");
+            }
+
+            if ((destinoExterno.IdAPI == 0) || (destinoExterno.Nombre == null) || (destinoExterno.Tipo == null) || (destinoExterno.Pais == null)
+                || (destinoExterno.Region == null))
+            {
+                throw new BusinessException("TurisTrack:CamposInvalidos")
+                .WithData("Message", "Se deben completar los campos obligatorios.");
             }
 
             // Mapear con ObjectMapper al Entity

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using System.Linq;
+
 
 
 namespace TurisTrack.DestinosTuristicos
@@ -13,15 +15,12 @@ namespace TurisTrack.DestinosTuristicos
     public class GeoDbDestinoService : ITransientDependency
     {
         private readonly HttpClient _httpClient;
-        private const string ApiKey = "4d859b8aa9msh2c6d4cd6720db61p1751e1jsnb37f58aa3269";
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
         private const string AtributosAPI = "id,name,country,countryCode,region,regionCode,latitude,longitude,elevationMeters,population,timezone,type";
 
-        public GeoDbDestinoService(HttpClient httpClient)
+        public GeoDbDestinoService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", ApiKey);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com");
+            _httpClient = httpClientFactory.CreateClient("GeoDbApi");
         }
 
         /// 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
@@ -123,6 +122,13 @@ namespace TurisTrack.DestinosTuristicos
             try
             {
                 var response = await _httpClient.GetAsync(url);
+
+                // Manejo especial para 404 (no encontrado)
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
