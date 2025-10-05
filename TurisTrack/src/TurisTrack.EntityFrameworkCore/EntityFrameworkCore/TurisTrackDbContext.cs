@@ -12,6 +12,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using TurisTrack.DestinosTuristicos;
 
 namespace TurisTrack.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ public class TurisTrackDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
 
 
     #region Entities from the modules
@@ -69,7 +71,7 @@ public class TurisTrackDbContext :
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureBlobStoring();
-        
+
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>
@@ -78,5 +80,25 @@ public class TurisTrackDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+
+        builder.Entity<DestinoTuristico>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "DestinosTuristicos", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.IdAPI).IsRequired();
+            b.Property(x => x.Tipo).IsRequired().HasMaxLength(100);
+            b.Property(x => x.Nombre).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Pais).IsRequired().HasMaxLength(200);
+            b.Property(x => x.CodigoPais).IsRequired(false).HasMaxLength(10);
+            b.Property(x => x.Region).IsRequired().HasMaxLength(100);
+            b.Property(x => x.CodigoRegion).IsRequired(false).HasMaxLength(10);
+            b.Property(x => x.MetrosDeElevacion);
+            b.Property(x => x.Latitud).IsRequired();
+            b.Property(x => x.Longitud).IsRequired();
+            b.Property(x => x.Poblacion).IsRequired();
+            b.Property(x => x.ZonaHoraria).IsRequired(false).HasMaxLength(100);
+            b.Property(x => x.Foto).IsRequired(false).HasMaxLength(500);
+            b.Property(x => x.Eliminado);
+        });
     }
 }
