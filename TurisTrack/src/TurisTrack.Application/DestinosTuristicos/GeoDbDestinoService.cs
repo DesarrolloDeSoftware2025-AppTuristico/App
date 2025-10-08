@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using TurisTrack.APIExterna;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
@@ -12,7 +13,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace TurisTrack.DestinosTuristicos
 {
-    public class GeoDbDestinoService : ITransientDependency
+    public class GeoDbDestinoService : ITransientDependency, IGeoDbDestinoService
     {
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";

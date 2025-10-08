@@ -1,5 +1,7 @@
-﻿using Shouldly;
+﻿using Moq;
+using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TurisTrack.DestinosTuristicos;
@@ -13,15 +15,32 @@ namespace TurisTrack.Tests.DestinosTuristicos
     public abstract class DestinoTuristicoAppService_Tests<TStartupModule> : TurisTrackApplicationTestBase<TStartupModule>
     where TStartupModule : IAbpModule
     {
+        //Prueba de la funcionalidad de guardar un destino turistico
         private readonly DestinoTuristicoAppService _service;
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
 
+        //Prueba de la funcionalidad de buscar un destino turistico por nombre. Pais, region, poblacionMinima (Opcionales)
+        
+        private readonly Mock<IRepository<DestinoTuristico, Guid>> _mockRepo;
+        private readonly Mock<GeoDbDestinoService> _mockGeoDbService;
+        private readonly DestinoTuristicoAppService _appService;
+        
+
         protected DestinoTuristicoAppService_Tests()
         {
+            //Prueba de la funcionalidad de guardar un destino turistico
             _service = GetRequiredService<DestinoTuristicoAppService>();
             _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
+
+            //Prueba de la funcionalidad de buscar un destino turistico por nombre. Pais, region, poblacionMinima (Opcionales)
+            
+            _mockRepo = new Mock<IRepository<DestinoTuristico, Guid>>();
+            _mockGeoDbService = new Mock<GeoDbDestinoService>(null); // no necesitamos HttpClient aquí
+            _appService = new DestinoTuristicoAppService(_mockRepo.Object, _mockGeoDbService.Object);
+            
         }
 
+        //Prueba de la funcionalidad de guardar un destino turistico
         [Fact]
         public async Task GuardarDestinoAsync_Deberia_Guardar_Correctamente()
         {
@@ -127,6 +146,74 @@ namespace TurisTrack.Tests.DestinosTuristicos
             });
 
         }
+
+        //Prueba de la funcionalidad de buscar un destino turistico por nombre. Pais, region, poblacionMinima (Opcionales)
+        
+        [Fact]
+        public async Task BuscarDestinosAsync_Deberia_Devolver_Resultados()
+        {
+            // Arrange
+            var mockData = new List<DestinoTuristicoDto>
+            {
+                new DestinoTuristicoDto { IdAPI = 1, Nombre = "Buenos Aires", Pais = "Argentina" },
+                new DestinoTuristicoDto { IdAPI = 2, Nombre = "Barcelona", Pais = "España" }
+            };
+
+            _mockGeoDbService
+                .Setup(s => s.BuscarDestinosAsync("Bue", null, null, null))
+                .ReturnsAsync(mockData);
+
+            // Act
+            var result = await _appService.BuscarDestinosAsync("Bue");
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(2);
+            result[0].Nombre.ShouldBe("Buenos Aires");
+        }
+
+        [Fact]
+        public async Task BuscarDestinosAsync_Deberia_Devolver_Lista_Vacia()
+        {
+            // Arrange
+            _mockGeoDbService
+                .Setup(s => s.BuscarDestinosAsync("XYZ", null, null, null))
+                .ReturnsAsync(new List<DestinoTuristicoDto>());
+
+            // Act
+            var result = await _appService.BuscarDestinosAsync("XYZ");
+
+            // Assert
+            result.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public async Task BuscarDestinosAsync_Deberia_Lanzar_Excepcion_Si_Nombre_Es_Nulo()
+        {
+            // Act & Assert
+            await Should.ThrowAsync<ArgumentNullException>(async () =>
+            {
+                await _appService.BuscarDestinosAsync(null);
+            });
+        }
+
+        [Fact]
+        public async Task BuscarDestinosAsync_Deberia_Manejar_Error_De_API()
+        {
+            // Arrange
+            _mockGeoDbService
+                .Setup(s => s.BuscarDestinosAsync("Roma", null, null, null))
+                .ThrowsAsync(new Exception("Error en la API externa"));
+
+            // Act & Assert
+            var ex = await Should.ThrowAsync<Exception>(async () =>
+            {
+                await _appService.BuscarDestinosAsync("Roma");
+            });
+
+            ex.Message.ShouldBe("Error en la API externa");
+        }
+        
     }
 }
 
