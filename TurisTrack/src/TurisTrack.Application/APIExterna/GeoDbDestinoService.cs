@@ -10,7 +10,6 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 
-
 namespace TurisTrack.APIExterna
 {
     public class GeoDbDestinoService : ITransientDependency, IGeoDbDestinoService
@@ -24,19 +23,10 @@ namespace TurisTrack.APIExterna
             _httpClient = httpClientFactory.CreateClient("GeoDbApi");
         }
 
-        /// 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
+        // 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
         public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
             int? poblacionMinima = null)
         {
-
-            if (nombre is null || nombre == "" || nombre == " ")
-                throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
-
-            if (string.IsNullOrWhiteSpace(nombre))
-            {
-                throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
-            }
-
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["namePrefix"] = nombre;
             query["limit"] = "10";

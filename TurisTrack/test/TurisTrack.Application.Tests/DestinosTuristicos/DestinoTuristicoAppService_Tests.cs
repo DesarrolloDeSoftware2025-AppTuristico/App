@@ -201,9 +201,10 @@ namespace TurisTrack.Tests.DestinosTuristicos
         {
 
             // Act & Assert
-            var result = await _appService.BuscarDestinosAsync(null);
-
-            result.ShouldBe("");
+            await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _appService.BuscarDestinosAsync(null);
+            });
 
         }
 
