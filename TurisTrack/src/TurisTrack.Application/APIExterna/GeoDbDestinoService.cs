@@ -5,13 +5,13 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using TurisTrack.APIExterna;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.APIExterna
 {
     public class GeoDbDestinoService : ITransientDependency, IGeoDbDestinoService
     {
@@ -28,6 +28,15 @@ namespace TurisTrack.DestinosTuristicos
         public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
             int? poblacionMinima = null)
         {
+
+            if (nombre is null || nombre == "" || nombre == " ")
+                throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
+
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
+            }
+
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["namePrefix"] = nombre;
             query["limit"] = "10";
@@ -49,7 +58,7 @@ namespace TurisTrack.DestinosTuristicos
                 }
 
                 response.EnsureSuccessStatusCode();
-
+                    
                 var content = await response.Content.ReadAsStringAsync();
                 var searchResult = JsonSerializer.Deserialize<GeoDbCitySearchResult>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 

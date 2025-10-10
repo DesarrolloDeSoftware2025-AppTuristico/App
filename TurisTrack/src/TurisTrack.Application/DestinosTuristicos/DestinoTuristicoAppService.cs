@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TurisTrack.APIExterna;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -14,11 +15,11 @@ namespace TurisTrack.DestinosTuristicos
     public class DestinoTuristicoAppService : ApplicationService
     {
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
-        private readonly GeoDbDestinoService _geoDbService;
+        private readonly IGeoDbDestinoService _geoDbService;
 
         public DestinoTuristicoAppService(
             IRepository<DestinoTuristico, Guid> destinoRepository,
-            GeoDbDestinoService geoDbService)
+            IGeoDbDestinoService geoDbService)
         {
             _destinoRepository = destinoRepository;
             _geoDbService = geoDbService;
