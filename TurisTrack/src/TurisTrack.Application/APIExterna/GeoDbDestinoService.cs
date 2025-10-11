@@ -5,14 +5,14 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 
-
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.APIExterna
 {
-    public class GeoDbDestinoService : ITransientDependency
+    public class GeoDbDestinoService : ITransientDependency, IGeoDbDestinoService
     {
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
@@ -23,7 +23,7 @@ namespace TurisTrack.DestinosTuristicos
             _httpClient = httpClientFactory.CreateClient("GeoDbApi");
         }
 
-        /// 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
+        // 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
         public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
             int? poblacionMinima = null)
         {
@@ -48,7 +48,7 @@ namespace TurisTrack.DestinosTuristicos
                 }
 
                 response.EnsureSuccessStatusCode();
-
+                    
                 var content = await response.Content.ReadAsStringAsync();
                 var searchResult = JsonSerializer.Deserialize<GeoDbCitySearchResult>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
