@@ -35,18 +35,20 @@ namespace TurisTrack.DestinosTuristicos
                 await WithUnitOfWorkAsync(async () =>
                 {
                     // Arrange
-                    int id = 3341803;
+                    string nombre = "Roma";
 
                     // Act
-                    var resultado = await _geoDbService.ObtenerDestinoPorIdAsync(id);
+                    var resultados = await _geoDbService.BuscarDestinosAsync(nombre);
+
+                    var dto = resultados.First();
 
                     // Assert
-                    resultado.IdAPI.ShouldBe(id);
-                    resultado.Nombre.ShouldBe("Romang");
-                    resultado.Pais.ShouldBe("Argentina");
-                    resultado.Region.ShouldBe("Santa Fe Province");
-                    resultado.Latitud.ShouldBe(-29.5);
-                    resultado.Longitud.ShouldBe(-59.76666667);
+                    dto.IdAPI.ShouldBe(3341803);
+                    dto.Nombre.ShouldBe("Romang");
+                    dto.Pais.ShouldBe("Argentina");
+                    dto.Region.ShouldBe("Santa Fe Province");
+                    dto.Latitud.ShouldBe(-29.5);
+                    dto.Longitud.ShouldBe(-59.76666667);
                 });
 
             }
