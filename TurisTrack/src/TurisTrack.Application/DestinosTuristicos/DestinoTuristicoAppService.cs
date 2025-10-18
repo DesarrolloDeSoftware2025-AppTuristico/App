@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TurisTrack.APIExterna;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -14,36 +15,42 @@ namespace TurisTrack.DestinosTuristicos
     public class DestinoTuristicoAppService : ApplicationService
     {
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
-        private readonly GeoDbDestinoService _geoDbService;
+        private readonly IGeoDbDestinoService _geoDbService;
 
         public DestinoTuristicoAppService(
             IRepository<DestinoTuristico, Guid> destinoRepository,
-            GeoDbDestinoService geoDbService)
+            IGeoDbDestinoService geoDbService)
         {
             _destinoRepository = destinoRepository;
             _geoDbService = geoDbService;
         }
 
-        /// 3.1 Buscar destinos (API externa)
+        // 3.1 Buscar destinos (API externa)
         public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
             int? poblacionMinima = null)
         {
+
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
+            }
+
             return await _geoDbService.BuscarDestinosAsync(nombre, pais, region, poblacionMinima);
         }
 
-        /// 3.2 Obtener detalle de un destino (API externa)
+        // 3.2 Obtener detalle de un destino (API externa)
         public async Task<DestinoTuristicoDto> ObtenerDestinoPorIdAsync(int id)
         {
             return await _geoDbService.ObtenerDestinoPorIdAsync(id);
         }
 
-        /// 3.3 Listar destinos populares (API externa)
+        // 3.3 Listar destinos populares (API externa)
         public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10)
         {
             return await _geoDbService.ListarDestinosPopularesAsync(limit);
         }
 
-        /// 3.4 Guardar un destino en la base interna (SQL Server)
+        // 3.4 Guardar un destino en la base interna (SQL Server)
         public async Task<SaveResultDto> GuardarDestinoAsync(DestinoTuristicoDto destinoExterno) //int idApi)
         {
             // Buscar el destino en la API externa
@@ -85,7 +92,7 @@ namespace TurisTrack.DestinosTuristicos
         }
 
 
-        /// Listar destinos guardados en la base local
+        // Listar destinos guardados en la base local
         public async Task<List<DestinoTuristicoDtoPersistido>> ListarDestinosGuardadosAsync()
         {
             var destinos = await _destinoRepository.GetListAsync();
