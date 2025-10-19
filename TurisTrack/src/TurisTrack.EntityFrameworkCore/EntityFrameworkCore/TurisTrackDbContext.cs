@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -9,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
-using TurisTrack.DestinosTuristicos;
+using Volo.Abp.Users;
 
 namespace TurisTrack.EntityFrameworkCore;
 
@@ -22,8 +23,11 @@ public class TurisTrackDbContext :
     AbpDbContext<TurisTrackDbContext>,
     IIdentityDbContext
 {
+    private readonly ICurrentUser? _currentUser;
+
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
+    public DbSet<CalificacionDestino> CalificacionesDestino { get; set; }
 
 
     #region Entities from the modules
@@ -51,10 +55,11 @@ public class TurisTrackDbContext :
 
     #endregion
 
-    public TurisTrackDbContext(DbContextOptions<TurisTrackDbContext> options)
+    public TurisTrackDbContext(DbContextOptions<TurisTrackDbContext> options,
+            ICurrentUser? currentUser = null)
         : base(options)
     {
-
+        _currentUser = currentUser;
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -99,6 +104,22 @@ public class TurisTrackDbContext :
             b.Property(x => x.ZonaHoraria).IsRequired(false).HasMaxLength(100);
             b.Property(x => x.Foto).IsRequired(false).HasMaxLength(500);
             b.Property(x => x.Eliminado);
+        });
+
+        builder.Entity<CalificacionDestino>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "CalificacionesDestinos", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Puntuacion).IsRequired();
+            b.Property(x => x.Comentario).IsRequired(false).HasMaxLength(1000);
+            b.Property(x => x.UserId).IsRequired();
+            b.Property(x => x.DestinoTuristicoId).IsRequired();
+            b.HasOne(x => x.DestinoTuristico)
+                .WithMany()
+                .HasForeignKey(x => x.DestinoTuristicoId).IsRequired();
+            
+            // Filtro global para el usuario actual
+            b.HasQueryFilter(x => x.UserId == _currentUser.Id);
         });
     }
 }
