@@ -1,9 +1,9 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Domain.Entities;
 
 namespace TurisTrack.DestinosTuristicos
 {
-    public class CalificacionDestino : FullAuditedAggregateRoot<Guid>, IUserOwned
+    public class CalificacionDestino : Entity<Guid>, IUserOwned
     {
         public Guid UserId { get; set; } // usuario autenticado
         public Guid DestinoTuristicoId { get; set; }
