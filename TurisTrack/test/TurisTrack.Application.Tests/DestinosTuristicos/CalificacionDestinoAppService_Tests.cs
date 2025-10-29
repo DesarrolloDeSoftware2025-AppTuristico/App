@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Moq;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,36 +15,150 @@ namespace TurisTrack.DestinosTuristicos
     public abstract class CalificacionDestinoAppService_Tests<TStartupModule> : TurisTrackApplicationTestBase<TStartupModule>
     where TStartupModule : IAbpModule
     {
-        private readonly CalificacionDestinoAppService _service;
+        private readonly CalificacionDestinoAppService _serviceCalificaciones;
+        private readonly DestinoTuristicoAppService _serviceDestinos;
         private readonly IRepository<CalificacionDestino, Guid> _creacionDestinoRepository;
+        private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
+
 
         protected CalificacionDestinoAppService_Tests()
         {
             //Prueba de la funcionalidad de guardar un destino turistico
-            _service = GetRequiredService<CalificacionDestinoAppService>();
+            _serviceCalificaciones = GetRequiredService<CalificacionDestinoAppService>();
+            _serviceDestinos = GetRequiredService<DestinoTuristicoAppService>();
             _creacionDestinoRepository = GetRequiredService<IRepository<CalificacionDestino, Guid>>();
+            _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
         }
 
         [Fact]
-        public async Task GuardarCalificacionAsync_Deberia_Guardar_Correctamente()
+        public async Task GuardarCalificacionAsync_Destino_Guardado_Correctamente()
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                // Arrange
-                var dto = new CalificacionDestinoDto
+                var existente = new DestinoTuristico
                 {
-                    UserId = Guid.NewGuid(),
-                    DestinoTuristicoId = Guid.NewGuid(),
-                    Puntuacion = 5,
-                    Comentario = "Excelente destino turístico!"
+                    IdAPI = 102,
+                    Tipo = "Ciudad",
+                    Nombre = "Akhtala",
+                    Pais = "Armenia",
+                    Region = "América del Sur",
+                    MetrosDeElevacion = 25,
+                    Latitud = -34.6037,
+                    Longitud = -58.3816,
+                    Poblacion = 2890151,
+                    Eliminado = false
                 };
+
+                await _destinoRepository.InsertAsync(existente, autoSave: true);
+
+                var destinos = await _serviceDestinos.ListarDestinosGuardadosAsync();
+
+                var destinoId = destinos.First().Id;
+
+                // Act
+                var response = await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5, "Excelente destino turístico!");
+
+                // Assert
+                response.ShouldContain("creada exitosamente");
+            });
+        }
+
+        [Fact]
+        public async Task GuardarCalificacionAsync_Destino_No_Encontrado()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
 
                 // Act
                 var exception = await Assert.ThrowsAsync<ApplicationException>(
-                    async () => await _service.CrearCalificacionAsync(Guid.NewGuid(), 5, "Excelente destino turístico!"));
+                    async () => await _serviceCalificaciones.CrearCalificacionAsync(Guid.NewGuid(), 5, "Excelente destino turístico!"));
 
                 // Assert
                 exception.Message.ShouldContain("no encontrado");
+            });
+        }
+
+        [Fact]
+        public async Task GuardarCalificacionAsync_Control_Rango_Puntuacion()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+
+                // Act
+                var exception = await Assert.ThrowsAsync<ApplicationException>(
+                    async () => await _serviceCalificaciones.CrearCalificacionAsync(Guid.NewGuid(), 7, "Excelente destino turístico!"));
+
+                // Assert
+                exception.Message.ShouldContain("entre 1 y 5");
+            });
+        }
+
+        [Fact]
+        public async Task GuardarCalificacionAsync_Comentario_Opcional()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var existente = new DestinoTuristico
+                {
+                    IdAPI = 102,
+                    Tipo = "Ciudad",
+                    Nombre = "Akhtala",
+                    Pais = "Armenia",
+                    Region = "América del Sur",
+                    MetrosDeElevacion = 25,
+                    Latitud = -34.6037,
+                    Longitud = -58.3816,
+                    Poblacion = 2890151,
+                    Eliminado = false
+                };
+
+                await _destinoRepository.InsertAsync(existente, autoSave: true);
+
+                var destinos = await _serviceDestinos.ListarDestinosGuardadosAsync();
+
+                var destinoId = destinos.First().Id;
+
+                // Act
+                var response = await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5);
+
+                // Assert
+                response.ShouldContain("creada exitosamente");
+            });
+        }
+
+        [Fact]
+        public async Task GuardarCalificacionAsync_Comprobar_Duplicado()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                var existente = new DestinoTuristico
+                {
+                    IdAPI = 102,
+                    Tipo = "Ciudad",
+                    Nombre = "Akhtala",
+                    Pais = "Armenia",
+                    Region = "América del Sur",
+                    MetrosDeElevacion = 25,
+                    Latitud = -34.6037,
+                    Longitud = -58.3816,
+                    Poblacion = 2890151,
+                    Eliminado = false
+                };
+
+                await _destinoRepository.InsertAsync(existente, autoSave: true);
+
+                var destinos = await _serviceDestinos.ListarDestinosGuardadosAsync();
+
+                var destinoId = destinos.First().Id;
+
+                var response = await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5, "Excelente destino turístico!");
+
+                // Act
+                var exception = await Assert.ThrowsAsync<ApplicationException>(
+                    async () => await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5, "Excelente destino turístico!"));
+
+                // Assert
+                exception.Message.ShouldContain("calificado este destino anteriormente");
             });
         }
     }

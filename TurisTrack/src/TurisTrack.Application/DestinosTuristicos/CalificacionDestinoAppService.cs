@@ -28,7 +28,7 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         [Authorize]
-        public async Task<String> CrearCalificacionAsync(Guid destinoId, int puntuacion, string? comentario)
+        public async Task<String> CrearCalificacionAsync(Guid destinoId, int puntuacion, string? comentario = null)
         {
             // Validar que la puntuación esté entre 1 y 5
             if (puntuacion < 1 || puntuacion > 5)
