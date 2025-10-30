@@ -35,19 +35,19 @@ namespace TurisTrack.DestinosTuristicos
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                var existente = new DestinoTuristico
-                {
-                    IdAPI = 102,
-                    Tipo = "Ciudad",
-                    Nombre = "Akhtala",
-                    Pais = "Armenia",
-                    Region = "América del Sur",
-                    MetrosDeElevacion = 25,
-                    Latitud = -34.6037,
-                    Longitud = -58.3816,
-                    Poblacion = 2890151,
-                    Eliminado = false
-                };
+                var existente = new DestinoTuristico(
+                    102,
+                    "Ciudad",
+                    "Akhtala",
+                    "Armenia",
+                    "América del Sur",
+                    "",
+                    "",
+                    25,
+                    -34.6037,
+                    -58.3816,
+                    2890151
+                );
 
                 await _destinoRepository.InsertAsync(existente, autoSave: true);
 
@@ -98,19 +98,19 @@ namespace TurisTrack.DestinosTuristicos
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                var existente = new DestinoTuristico
-                {
-                    IdAPI = 102,
-                    Tipo = "Ciudad",
-                    Nombre = "Akhtala",
-                    Pais = "Armenia",
-                    Region = "América del Sur",
-                    MetrosDeElevacion = 25,
-                    Latitud = -34.6037,
-                    Longitud = -58.3816,
-                    Poblacion = 2890151,
-                    Eliminado = false
-                };
+                var existente = new DestinoTuristico(
+                    102,
+                    "Ciudad",
+                    "Akhtala",
+                    "Armenia",
+                    "América del Sur",
+                    "",
+                    "",
+                    25,
+                    -34.6037,
+                    -58.3816,
+                    2890151
+                );
 
                 await _destinoRepository.InsertAsync(existente, autoSave: true);
 
@@ -131,19 +131,19 @@ namespace TurisTrack.DestinosTuristicos
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                var existente = new DestinoTuristico
-                {
-                    IdAPI = 102,
-                    Tipo = "Ciudad",
-                    Nombre = "Akhtala",
-                    Pais = "Armenia",
-                    Region = "América del Sur",
-                    MetrosDeElevacion = 25,
-                    Latitud = -34.6037,
-                    Longitud = -58.3816,
-                    Poblacion = 2890151,
-                    Eliminado = false
-                };
+                var existente = new DestinoTuristico(
+                    102,
+                    "Ciudad",
+                    "Akhtala",
+                    "Armenia",
+                    "América del Sur",
+                    "",
+                    "",
+                    25,
+                    -34.6037,
+                    -58.3816,
+                    2890151
+                );
 
                 await _destinoRepository.InsertAsync(existente, autoSave: true);
 
