@@ -19,13 +19,12 @@ namespace TurisTrack.DestinosTuristicos
         private readonly CalificacionDestinoAppService _calificacionAppService;
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
         private readonly IRepository<CalificacionDestino, Guid> _calificacionRepository;
-        private readonly ICurrentUser _currentUser;
 
         public CalificacionDestinoAppService_IntegrationTests()
         {
             _calificacionAppService = GetRequiredService<CalificacionDestinoAppService>();
             _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
-            _currentUser = GetRequiredService<ICurrentUser>();
+            _calificacionRepository = GetRequiredService<IRepository<CalificacionDestino, Guid>>();
         }
         /*
         [Fact]
@@ -79,41 +78,20 @@ namespace TurisTrack.DestinosTuristicos
             var destinoObj1 = await CrearDestinoDePruebaAsync(destino1);
             var destinoObj2 = await CrearDestinoDePruebaAsync(destino2);
 
-            /*
-            var calificacion = new CalificacionDestinoDto
-            {
-                UserId = new Guid("1D7BF19C-1111-1111-1111-3A1D0BA73CE2"),
-                DestinoTuristicoId = destinoObj1.Id,
-                Puntuacion = 2,
-                Comentario = "Argentina",
-            };*/
 
-            //var respuesta1 = await CrearCalificacionAsync(calificacion);
-
-            var mockCurrentUser = new Mock<ICurrentUser>();
-            mockCurrentUser.Setup(x => x.Id).Returns(Guid.NewGuid());
-            mockCurrentUser.Setup(x => x.Email).Returns("test@user.com");
-
-            var respuesta1 = await _calificacionAppService.CrearCalificacionAsync(destinoObj1.Id, 5, "Excelente destino!");
+            var respuesta1 =  await CrearCalificacionPorIdAsync(destinoObj1.Id, new Guid("1D7BF19C-1111-1111-201B-3A1D0BA73CE2"), 5, "Excelente destino!");
 
 
-            var mockCurrentUser2 = new Mock<ICurrentUser>();
-            mockCurrentUser.Setup(x => x.Id).Returns(new Guid("1D7BF19C-1111-1111-1111-3A1D0BA73CE2"));
-            mockCurrentUser.Setup(x => x.Email).Returns("test@user.com");
-
-            //var respuesta2 = await _calificacionAppService.CrearCalificacionAsync(destinoObj1.Id, 5, "Excelente destino!");
+            var respuesta2 = await _calificacionAppService.CrearCalificacionAsync(destinoObj1.Id, 5, "Excelente destino!");
             var respuesta3 = await _calificacionAppService.CrearCalificacionAsync(destinoObj2.Id, 5, "Excelente destino!");
 
 
 
             // Act: obtener calificaciones solo del current usuario 
-            //var listaCalificaciones = await _calificacionAppService.ObtenerMisCalificacionesAsync();
+            var listaCalificaciones = await _calificacionAppService.ObtenerMisCalificacionesAsync();
 
             // Assert
-            //listaCalificaciones.Count.ShouldBe(2);
-            respuesta1.ShouldBe("Calificación creada exitosamente.");
-            respuesta3.ShouldBe("Calificación creada exitosamente.");
-
+            listaCalificaciones.Count.ShouldBe(2);
         }
 
         private async Task<DestinoTuristico> CrearDestinoDePruebaAsync(DestinoTuristicoDto destinoDto)
@@ -130,13 +108,14 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         // Metodo auxiliar
-        public async Task<String> CrearCalificacionAsync(CalificacionDestinoDto calificacionDto)
+        private async Task<String> CrearCalificacionPorIdAsync(Guid destinoId, Guid userId, int puntuacion, string? comentario = null)
         {
+
             var calificacion = new CalificacionDestino(
-                calificacionDto.Id,
-                calificacionDto.DestinoTuristicoId,
-                calificacionDto.Puntuacion,
-                calificacionDto.Comentario
+                userId,
+                destinoId,
+                puntuacion,
+                comentario
             );
 
             await _calificacionRepository.InsertAsync(calificacion, autoSave: true);
