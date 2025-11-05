@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
@@ -30,6 +31,12 @@ namespace TurisTrack.DestinosTuristicos
         [Authorize]
         public async Task<String> CrearCalificacionAsync(Guid destinoId, int puntuacion, string? comentario = null)
         {
+            // Verificar que el usuario esté autenticado
+            if (!_currentUser.IsAuthenticated)
+            {
+                throw new ApplicationException("El usuario no está autenticado.");
+            }
+
             // Validar que la puntuación esté entre 1 y 5
             if (puntuacion < 1 || puntuacion > 5)
                 throw new ApplicationException("La puntuación debe estar entre 1 y 5.");

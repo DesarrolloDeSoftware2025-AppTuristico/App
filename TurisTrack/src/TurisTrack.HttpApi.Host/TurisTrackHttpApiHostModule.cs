@@ -1,46 +1,45 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using OpenIddict.Server.AspNetCore;
-using OpenIddict.Validation.AspNetCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using OpenIddict.Validation.AspNetCore;
+using OpenIddict.Server.AspNetCore;
 using TurisTrack.EntityFrameworkCore;
-using TurisTrack.HealthChecks;
 using TurisTrack.MultiTenancy;
+using TurisTrack.HealthChecks;
+using Microsoft.OpenApi.Models;
 using Volo.Abp;
+using Volo.Abp.Studio;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.Data;
-using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.Security.Claims;
-using Volo.Abp.Studio;
-using Volo.Abp.Studio.Client.AspNetCore;
-using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+using Microsoft.AspNetCore.Hosting;
+using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Identity;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.Swashbuckle;
+using Volo.Abp.Studio.Client.AspNetCore;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery; // <-- Agrega este using
 
 namespace TurisTrack;
 
@@ -90,10 +89,14 @@ public class TurisTrackHttpApiHostModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddTransient<IDataSeedContributor, TurisTrackAuthServerDataSeedContributor>();
-
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        // Desactiva antiforgery para APIs
+        context.Services.Configure<AbpAntiForgeryOptions>(options =>
+        {
+            options.AutoValidate = false;
+        });
 
         if (!configuration.GetValue<bool>("App:DisablePII"))
         {
@@ -107,7 +110,7 @@ public class TurisTrackHttpApiHostModule : AbpModule
             {
                 options.DisableTransportSecurityRequirement = true;
             });
-            
+
             Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
@@ -204,19 +207,18 @@ public class TurisTrackHttpApiHostModule : AbpModule
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
 
-                // Agregar definici�n de seguridad
-                options.AddSecurityDefinition("Bearer", new
-                OpenApiSecurityScheme
-                 {
-                     Description = "Ingrese el token JWT en el formato: Bearer { token }",
-                     Name = "Authorization",
-                     In = ParameterLocation.Header,
-                     Type = SecuritySchemeType.ApiKey,
-                     Scheme = "Bearer"
-                 });
-                
+                // 🔒 Agrego definición manual de esquema Bearer
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Ingrese el token JWT como: Bearer {token}",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                 {
+                {
                     {
                         new OpenApiSecurityScheme
                         {
@@ -228,8 +230,10 @@ public class TurisTrackHttpApiHostModule : AbpModule
                         },
                         Array.Empty<string>()
                     }
-                 });
+                });
             });
+
+
     }
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
@@ -259,14 +263,8 @@ public class TurisTrackHttpApiHostModule : AbpModule
         context.Services.AddTurisTrackHealthChecks();
     }
 
-    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-
-        //Agregado
-        var dataSeeder = context.ServiceProvider.GetRequiredService<IDataSeeder>();
-        await dataSeeder.SeedAsync();
-        //FinAgregado
-
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 

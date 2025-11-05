@@ -1,13 +1,23 @@
-﻿using Moq;
+﻿using Autofac.Core;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
+using Moq;
+using NSubstitute;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 using Xunit;
 
@@ -26,21 +36,31 @@ namespace TurisTrack.DestinosTuristicos
             _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
             _calificacionRepository = GetRequiredService<IRepository<CalificacionDestino, Guid>>();
         }
-        /*
-        [Fact]
-        public async Task Deberia_Requerir_Autenticacion_Para_Calificar()
-        {
-            // Act & Assert
-            await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
-            {
-                using (_currentUser.IsAuthenticated) // Usuario no autenticado
-                {
-                    var destino = await CrearDestinoDePruebaAsync();
 
-                    await _calificacionAppService.CrearCalificacionAsync(destino.Id, 4, "Muy bueno");
-                }
+        [Fact]
+        public async Task Deberia_Fallar_Si_No_Esta_Autenticado()
+        {
+            var principalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
+            principalAccessor.Change(new ClaimsPrincipal());
+
+            var destino = await CrearDestinoDePruebaAsync(new DestinoTuristicoDto
+            {
+                IdAPI = 105,
+                Tipo = "Ciudad",
+                Nombre = "Buenos Aires",
+                Pais = "Argentina",
+                Region = "América del Sur"
             });
-        }*/
+
+
+            var exception = await Assert.ThrowsAsync<ApplicationException>(async () =>
+            {
+                await _calificacionAppService.CrearCalificacionAsync(destino.Id, 5, "Excelente!");
+            });
+
+            exception.Message.ShouldContain("no está autenticado");
+
+        }
 
         [Fact]
         public async Task Deberia_Respetar_Filtro_Por_Usuario()
@@ -107,7 +127,9 @@ namespace TurisTrack.DestinosTuristicos
             return destino;
         }
 
-        // Metodo auxiliar
+
+
+        // Metodos auxiliares
         private async Task<String> CrearCalificacionPorIdAsync(Guid destinoId, Guid userId, int puntuacion, string? comentario = null)
         {
 
@@ -123,6 +145,7 @@ namespace TurisTrack.DestinosTuristicos
             return "Calificación creada exitosamente.";
         }
 
+        
     }
 }
 

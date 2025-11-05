@@ -37,7 +37,7 @@ namespace TurisTrack
                 ClientId = clientId,
                 DisplayName = "Swagger UI",
                 ClientType = OpenIddictConstants.ClientTypes.Public,
-                ConsentType = OpenIddictConstants.ConsentTypes.Implicit,
+                ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
                 RedirectUris = { redirectUri },
                 Permissions =
                 {
