@@ -102,7 +102,8 @@ namespace TurisTrack.DestinosTuristicos
             {
                 result.Add(new DestinoTuristicoDtoPersistido
                 {
-                    IdAPI = d.Id,
+                    Id = d.Id,
+                    IdAPI = d.IdAPI,
                     Tipo = d.Tipo,
                     Nombre = d.Nombre,
                     Pais = d.Pais,
@@ -126,7 +127,8 @@ namespace TurisTrack.DestinosTuristicos
     // DTO para guardar y mostrar lo que está en BD
     public class DestinoTuristicoDtoPersistido : EntityDto<Guid>
     {
-        public Guid IdAPI { get; set; }
+        public Guid Id { get; set; }
+        public int IdAPI { get; set; } 
         public string Tipo { get; set; }
         public string Nombre { get; set; }
         public string Pais { get; set; }

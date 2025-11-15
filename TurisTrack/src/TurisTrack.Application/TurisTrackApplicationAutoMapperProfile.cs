@@ -14,5 +14,7 @@ public class TurisTrackApplicationAutoMapperProfile : Profile
         CreateMap<DestinoTuristico, DestinoTuristicoDto>();
         CreateMap<DestinoTuristicoDto, DestinoTuristico>();
         CreateMap<CreateUpdateDestinoTuristicoDto, DestinoTuristico>();
+        CreateMap<CalificacionDestino, CalificacionDestinoDto>();
+        CreateMap<CalificacionDestinoDto, CalificacionDestino>();
     }
 }

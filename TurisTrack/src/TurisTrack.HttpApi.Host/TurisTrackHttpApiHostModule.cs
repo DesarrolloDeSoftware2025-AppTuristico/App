@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,6 +39,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Studio.Client.AspNetCore;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery; // <-- Agrega este using
 
 namespace TurisTrack;
 
@@ -91,6 +92,12 @@ public class TurisTrackHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
+        // Desactiva antiforgery para APIs
+        context.Services.Configure<AbpAntiForgeryOptions>(options =>
+        {
+            options.AutoValidate = false;
+        });
+
         if (!configuration.GetValue<bool>("App:DisablePII"))
         {
             Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
@@ -103,7 +110,7 @@ public class TurisTrackHttpApiHostModule : AbpModule
             {
                 options.DisableTransportSecurityRequirement = true;
             });
-            
+
             Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
@@ -199,7 +206,34 @@ public class TurisTrackHttpApiHostModule : AbpModule
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "TurisTrack API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+
+                // 🔒 Agrego definición manual de esquema Bearer
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Ingrese el token JWT como: Bearer {token}",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
+
+
     }
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
