@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
 
 
 namespace TurisTrack.APIExterna
@@ -19,22 +17,20 @@ namespace TurisTrack.APIExterna
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
         private const string AtributosAPI = "id,name,country,countryCode,region,regionCode,latitude,longitude,elevationMeters,population,timezone,type";
-        private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
-        public GeoDbDestinoService(IHttpClientFactory httpClientFactory, IRepository<DestinoTuristico, Guid> destinoRepository)
+
+        public GeoDbDestinoService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("GeoDbApi");
-            _destinoRepository = destinoRepository;
-
         }
 
-
         // 3.1 Buscar destinos por nombre parcial o completo, opcional país o región y población mínima
-        public async Task<PagedResultDto<DestinoTuristicoDto>> BuscarDestinosAsync(BusquedaDestinoTuristicoDto input)
+        public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
+            int? poblacionMinima = null)
         {
-            // 1) Construir query para API externa
             var query = HttpUtility.ParseQueryString(string.Empty);
-            query["namePrefix"] = input.Nombre;
-            query["limit"] = "100"; // Le pedimos más resultados y paginamos localmente
+            query["namePrefix"] = nombre;
+            query["limit"] = "10";
+            // Solicitar solo los campos necesarios
             query["fields"] = AtributosAPI;
 
             var url = $"{BaseUrl}/cities?{query}";
@@ -43,6 +39,7 @@ namespace TurisTrack.APIExterna
             {
                 var response = await _httpClient.GetAsync(url);
 
+                // Para debugging
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
@@ -51,18 +48,11 @@ namespace TurisTrack.APIExterna
                 }
 
                 response.EnsureSuccessStatusCode();
-
+                    
                 var content = await response.Content.ReadAsStringAsync();
-                var searchResult = JsonSerializer.Deserialize<GeoDbCitySearchResult>(
-                    content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                );
+                var searchResult = JsonSerializer.Deserialize<GeoDbCitySearchResult>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 var destinos = new List<DestinoTuristicoDto>();
-
-                // ---------------------------
-                // 2) Convertir respuesta a DTO local
-                // ---------------------------
                 if (searchResult?.Data != null)
                 {
                     foreach (var item in searchResult.Data)
@@ -86,52 +76,34 @@ namespace TurisTrack.APIExterna
                     }
                 }
 
-                // ---------------------------
-                // 3) Aplicar filtros locales
-                // ---------------------------
-                if (!string.IsNullOrWhiteSpace(input.Pais))
+                // Aplicar filtros locales
+
+                if (!string.IsNullOrWhiteSpace(pais))
                 {
                     destinos = destinos
                         .Where(d =>
-                            (d.Pais != null && d.Pais.Contains(input.Pais, StringComparison.OrdinalIgnoreCase)) ||
-                            (d.CodigoPais != null && d.CodigoPais.Contains(input.Pais, StringComparison.OrdinalIgnoreCase)))
+                            d.Pais.Contains(pais, StringComparison.OrdinalIgnoreCase) ||
+                            d.CodigoPais.Contains(pais, StringComparison.OrdinalIgnoreCase))
                         .ToList();
                 }
 
-                if (!string.IsNullOrWhiteSpace(input.Region))
+                if (!string.IsNullOrWhiteSpace(region))
                 {
                     destinos = destinos
                         .Where(d =>
-                            (d.Region != null && d.Region.Contains(input.Region, StringComparison.OrdinalIgnoreCase)) ||
-                            (d.CodigoRegion != null && d.CodigoRegion.Contains(input.Region, StringComparison.OrdinalIgnoreCase)))
+                            d.Region.Contains(region, StringComparison.OrdinalIgnoreCase) ||
+                            d.CodigoRegion.Contains(region, StringComparison.OrdinalIgnoreCase))
                         .ToList();
                 }
 
-                if (input.PoblacionMinima.HasValue && input.PoblacionMinima > 0)
+                if (poblacionMinima.HasValue && poblacionMinima > 0)
                 {
                     destinos = destinos
-                        .Where(d => d.Poblacion >= input.PoblacionMinima.Value)
+                        .Where(d => d.Poblacion >= poblacionMinima.Value)
                         .ToList();
                 }
 
-
-                // ---------------------------
-                // 5) Total antes de paginar
-                // ---------------------------
-                var totalCount = destinos.Count;
-
-                // ---------------------------
-                // 6) Aplicar paginación (local)
-                // ---------------------------
-                var pagedItems = destinos
-                    .Skip(input.SkipCount)
-                    .Take(input.MaxResultCount)
-                    .ToList();
-
-                // ---------------------------
-                // 7) Devolver resultado compatible con Angular y ABP
-                // ---------------------------
-                return new PagedResultDto<DestinoTuristicoDto>(totalCount, pagedItems);
+                return destinos;
             }
             catch (Exception ex)
             {
@@ -139,7 +111,6 @@ namespace TurisTrack.APIExterna
                 throw;
             }
         }
-
 
 
         /// 3.2 Obtener información detallada de un destino (por ID)
