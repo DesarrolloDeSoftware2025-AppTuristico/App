@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PagedResultDto, CoreModule } from '@abp/ng.core';
+import { CoreModule } from '@abp/ng.core';
 import { DestinoTuristicoService } from '../../proxy/destinos-turisticos/destino-turistico.service';
-import { DestinoTuristicoDto} from '../../proxy/destinos-turisticos/models';
+import { DestinoTuristicoDto } from '../../proxy/destinos-turisticos/models';
 import { finalize } from 'rxjs/operators';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
@@ -12,167 +12,126 @@ import { environment } from 'src/environments/environment';
   selector: 'app-destinations-list',
   standalone: true,
   imports: [CommonModule, FormsModule, CoreModule, NgbPaginationModule],
-  templateUrl: './destinations-list.component.html',
-  styleUrls: ['./destinations-list.component.scss'],
+  templateUrl: './lista-destinos.html',
+  styleUrls: ['./lista-destinos.scss'],
 })
 export class ListaDestinos implements OnInit {
-  // Inyección de dependencias usando la nueva sintaxis de inject()
   private readonly destinationService = inject(DestinoTuristicoService);
 
   /**
-   * Lista de destinos obtenidos de la API
+   * Lista TOTAL de destinos recibidos del backend
    */
   destinations: DestinoTuristicoDto[] = [];
 
   /**
-   * Indica si hay una petición en curso
+   * Lista visible (paginada localmente)
    */
+  pagedDestinations: DestinoTuristicoDto[] = [];
+
   loading = false;
 
   /**
-   * Parámetros de búsqueda y paginación
-   * - query: Término de búsqueda libre
-   * - country: Filtro por país específico
-   * - skipCount: Número de registros a saltar (para paginación)
-   * - maxResultCount: Número máximo de registros por página
+   * Parámetros de búsqueda
    */
-  searchParams: DestinationSearchInputDto = {
-    skipCount: 0,
-    maxResultCount: 10,
+  searchParams = {
     query: '',
     country: '',
   };
 
   /**
-   * Total de registros disponibles (para paginación)
+   * Para paginación local
    */
   totalCount = 0;
-
-  /**
-   * Página actual (basada en 1)
-   */
   currentPage = 1;
+  pageSize = 10;
 
-  /**
-   * Imagen por defecto cuando el destino no tiene imageUrl
-   */
   readonly defaultImage = 'assets/images/destination-placeholder.svg';
 
   ngOnInit(): void {
-    // Cargar los destinos al inicializar el componente
     this.loadDestinations();
   }
 
   /**
-   * Carga los destinos desde la API
+   * Llama al backend (que devuelve una LISTA SIMPLE)
    */
   private loadDestinations(): void {
     this.loading = true;
 
     this.destinationService
-      .buscarDestinos(this.searchParams)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        })
+      .buscarDestinos(
+        this.searchParams.query,
+        this.searchParams.country,
+        undefined, // region (no usada)
+        undefined  // poblacionMinima (no usada)
       )
+      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (result: PagedResultDto<DestinoTuristicoDto>) => {
-          // Asignar los resultados al array de destinos
-          this.destinations = result.items || [];
-          this.totalCount = result.totalCount || 0;
+        next: (result: DestinoTuristicoDto[]) => {
+          // Guardamos lista completa
+          this.destinations = result;
+
+          // Actualizamos conteo total
+          this.totalCount = result.length;
+
+          // Calculamos la paginación local
+          this.applyPagination();
         },
         error: (error) => {
-          // Manejar errores de la API
           console.error('Error al cargar destinos:', error);
           this.destinations = [];
+          this.pagedDestinations = [];
           this.totalCount = 0;
         },
       });
   }
 
   /**
-   * Maneja el evento de búsqueda
-   * Reinicia la paginación y recarga los datos
+   * Paginación LOCAL
    */
-  onSearch(): void {
-    // Reiniciar a la primera página
-    this.searchParams.skipCount = 0;
-    this.currentPage = 1;
+  private applyPagination(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
 
-    // Recargar los datos
+    this.pagedDestinations = this.destinations.slice(startIndex, endIndex);
+  }
+
+  onSearch(): void {
+    this.currentPage = 1;
     this.loadDestinations();
   }
 
-  /**
-   * Limpia los filtros de búsqueda y recarga todos los destinos
-   */
   clearSearch(): void {
     this.searchParams.query = '';
     this.searchParams.country = '';
     this.onSearch();
   }
 
-  /**
-   * Maneja errores de carga de imágenes
-   * Asigna la imagen por defecto cuando falla la carga
-   *
-   * @param event - Evento del error de imagen
-   */
   onImageError(event: any): void {
     event.target.src = this.defaultImage;
   }
 
-  /**
-   * Formatea las coordenadas para mostrar
-   *
-   * @param latitude - Latitud del destino
-   * @param longitude - Longitud del destino
-   * @returns String con formato "lat, lng"
-   */
   formatCoordinates(latitude: number, longitude: number): string {
     return `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
   }
 
-  /**
-   * Formatea el número de población con separadores de miles
-   *
-   * @param population - Número de habitantes
-   * @returns String formateado o mensaje si no hay datos
-   */
   formatPopulation(population?: number): string {
-    if (!population) {
-      return 'N/A';
-    }
+    if (!population) return 'N/A';
     return population.toLocaleString('es-ES');
   }
 
-  /**
-   * Abre el destino en Google Maps usando las coordenadas
-   *
-   * @param destination - Destino turístico
-   */
   openInMaps(destination: DestinoTuristicoDto): void {
-    const url = `https://www.google.com/maps/search/?api=1&query=${destination.latitude},${destination.longitude}`;
+    const url = `https://www.google.com/maps/search/?api=1&query=${destination.latitud},${destination.longitud}`;
     window.open(url, '_blank');
   }
 
   /**
-   * Maneja el cambio de página
-   *
-   * @param page - Número de la nueva página (basada en 1)
+   * Cambia de página (pag. local)
    */
   onPageChange(page: number): void {
     this.currentPage = page;
-    // Calcular el skipCount basado en la página actual
-    this.searchParams.skipCount = (page - 1) * this.searchParams.maxResultCount;
-    this.loadDestinations();
+    this.applyPagination();
   }
 
-  /**
-   * Devuelve la URL de la imagen de un destino.
-   * @param imageUrl - URL relativa de la imagen
-   */
   getDestinationImage(imageUrl: string): string {
     return imageUrl ? environment.apis.default.url + imageUrl : this.defaultImage;
   }
