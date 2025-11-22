@@ -17,5 +17,12 @@ function configureRoutes() {
         order: 1,
         layout: eLayoutType.application,
       },
+      {
+        path: '/destinos',
+        name: '::Menu:Destinos',
+        iconClass: 'fas fa-map-marked-alt',
+        order: 2,
+        layout: eLayoutType.application,
+      },
   ]);
 }

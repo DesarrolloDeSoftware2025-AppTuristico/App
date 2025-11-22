@@ -19,4 +19,9 @@ export const APP_ROUTES: Routes = [
     path: 'setting-management',
     loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),
   },
+  {
+    path: 'destinos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./destinos/lista-destinos/lista-destinos').then(c => c.ListaDestinos),
+  },
 ];

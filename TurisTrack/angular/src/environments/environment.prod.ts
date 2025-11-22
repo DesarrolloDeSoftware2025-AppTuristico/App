@@ -5,11 +5,12 @@ const baseUrl = 'http://localhost:4200';
 const oAuthConfig = {
   issuer: 'https://localhost:44340/',
   redirectUri: baseUrl,
-  clientId: 'TurisTrack_App',
+  clientId: 'TurisTrack_Swagger',
   responseType: 'code',
-  scope: 'offline_access TurisTrack',
+  scope: 'TurisTrack',
   requireHttps: true,
 };
+
 
 export const environment = {
   production: true,
