@@ -36,6 +36,8 @@ export class ListaDestinos implements OnInit {
   searchParams = {
     query: '',
     country: '',
+    region: '',
+    minPopulation: undefined as number | undefined
   };
 
   /**
@@ -45,7 +47,6 @@ export class ListaDestinos implements OnInit {
   currentPage = 1;
   pageSize = 10;
 
-  readonly defaultImage = 'assets/images/destination-placeholder.svg';
 
   ngOnInit(): void {
     this.loadDestinations();
@@ -55,35 +56,32 @@ export class ListaDestinos implements OnInit {
    * Llama al backend (que devuelve una LISTA SIMPLE)
    */
   private loadDestinations(): void {
-    this.loading = true;
+  this.loading = true;
 
-    this.destinationService
-      .buscarDestinos(
-        this.searchParams.query,
-        this.searchParams.country,
-        undefined, // region (no usada)
-        undefined  // poblacionMinima (no usada)
-      )
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: (result: DestinoTuristicoDto[]) => {
-          // Guardamos lista completa
-          this.destinations = result;
+  this.destinationService
+    .buscarDestinos(
+      this.searchParams.query,
+      this.searchParams.country,
+      this.searchParams.region,
+      this.searchParams.minPopulation
+    )
+    .pipe(finalize(() => (this.loading = false)))
+    .subscribe({
+      next: (result: DestinoTuristicoDto[]) => {
+        this.destinations = result;
+        this.totalCount = result.length;
+        this.applyPagination();
 
-          // Actualizamos conteo total
-          this.totalCount = result.length;
+        console.log('Resultados:', result);
+      },
+      error: () => {
+        this.destinations = [];
+        this.pagedDestinations = [];
+        this.totalCount = 0;
+      },
+    });
+}
 
-          // Calculamos la paginación local
-          this.applyPagination();
-        },
-        error: (error) => {
-          console.error('Error al cargar destinos:', error);
-          this.destinations = [];
-          this.pagedDestinations = [];
-          this.totalCount = 0;
-        },
-      });
-  }
 
   /**
    * Paginación LOCAL
@@ -106,9 +104,6 @@ export class ListaDestinos implements OnInit {
     this.onSearch();
   }
 
-  onImageError(event: any): void {
-    event.target.src = this.defaultImage;
-  }
 
   formatCoordinates(latitude: number, longitude: number): string {
     return `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
@@ -119,11 +114,6 @@ export class ListaDestinos implements OnInit {
     return population.toLocaleString('es-ES');
   }
 
-  openInMaps(destination: DestinoTuristicoDto): void {
-    const url = `https://www.google.com/maps/search/?api=1&query=${destination.latitud},${destination.longitud}`;
-    window.open(url, '_blank');
-  }
-
   /**
    * Cambia de página (pag. local)
    */
@@ -132,7 +122,4 @@ export class ListaDestinos implements OnInit {
     this.applyPagination();
   }
 
-  getDestinationImage(imageUrl: string): string {
-    return imageUrl ? environment.apis.default.url + imageUrl : this.defaultImage;
-  }
 }
