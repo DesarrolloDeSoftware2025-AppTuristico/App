@@ -49,8 +49,10 @@ export class ListaDestinos implements OnInit {
 
 
   ngOnInit(): void {
+  if (this.searchParams.query.trim() !== '') {
     this.loadDestinations();
   }
+}
 
   /**
    * Llama al backend (que devuelve una LISTA SIMPLE)
@@ -99,10 +101,16 @@ export class ListaDestinos implements OnInit {
   }
 
   clearSearch(): void {
-    this.searchParams.query = '';
-    this.searchParams.country = '';
-    this.onSearch();
-  }
+  this.searchParams.query = '';
+  this.searchParams.country = '';
+  this.searchParams.region = '';
+  this.searchParams.minPopulation = undefined;
+
+  this.destinations = [];
+  this.pagedDestinations = [];
+  this.totalCount = 0;
+}
+
 
 
   formatCoordinates(latitude: number, longitude: number): string {

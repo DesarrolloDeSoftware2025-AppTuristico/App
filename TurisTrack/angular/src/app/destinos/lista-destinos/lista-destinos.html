@@ -9,7 +9,7 @@
 
     <div class="card-body">
 
-      <!-- 🔍 BUSCADOR -->
+      <!-- BUSCADOR -->
       <div class="search-container">
 
         <!-- Nombre -->
@@ -36,7 +36,7 @@
           />
         </div>
 
-        <!-- 🌍 Región (NUEVO) -->
+        <!--  Región (NUEVO) -->
         <div class="search-field">
           <label>Región</label>
           <input
@@ -48,7 +48,7 @@
           />
         </div>
 
-        <!-- 👥 Población mínima (NUEVO) -->
+        <!--  Población mínima (NUEVO) -->
         <div class="search-field">
           <label>Población mínima</label>
           <input
@@ -72,12 +72,12 @@
 
       </div>
 
-      <!-- 🔄 CARGANDO -->
+      <!-- CARGANDO -->
       <div class="loading-overlay" *ngIf="loading">
         <div class="spinner-border text-primary"></div>
       </div>
 
-      <!-- 📋 GRID DE DATOS (SIN IMÁGENES) -->
+      <!-- GRID DE DATOS (SIN IMÁGENES) -->
       <div class="destinations-grid" *ngIf="!loading && pagedDestinations.length > 0">
 
         <div class="destination-card" *ngFor="let destination of pagedDestinations">
@@ -115,12 +115,11 @@
         </div>
       </div>
 
-      <!-- 🚫 VACÍO -->
+      <!-- VACÍO -->
       <div class="empty-state" *ngIf="!loading && pagedDestinations.length === 0">
         <i class="fa fa-search fa-3x mb-3"></i>
         <h4>No se encontraron resultados</h4>
         <p>Probá cambiando los filtros o mostrando todos los destinos.</p>
-        <button class="btn btn-primary" (click)="clearSearch()">Mostrar todos</button>
       </div>
 
       <!-- PAGINACIÓN -->
