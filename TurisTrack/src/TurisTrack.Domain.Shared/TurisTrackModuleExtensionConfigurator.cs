@@ -37,6 +37,31 @@ public static class TurisTrackModuleExtensionConfigurator
 
     private static void ConfigureExtraProperties()
     {
+        ObjectExtensionManager.Instance.Modules()
+                .ConfigureIdentity(identity =>
+                {
+                    identity.ConfigureUser(user =>
+                    {
+                        // 1. Campo Foto
+                        user.AddOrUpdateProperty<string>(
+                            "Foto",
+                            property =>
+                            {
+                                property.Attributes.Add(new System.ComponentModel.DataAnnotations.MaxLengthAttribute(2048));
+                            }
+                        );
+
+                        // 2. Campo Preferencias
+                        user.AddOrUpdateProperty<string>(
+                            "Preferencias",
+                            property =>
+                            {
+                                property.Attributes.Add(new System.ComponentModel.DataAnnotations.MaxLengthAttribute(500));
+                            }
+                        );
+                    });
+                });
+
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
          *
