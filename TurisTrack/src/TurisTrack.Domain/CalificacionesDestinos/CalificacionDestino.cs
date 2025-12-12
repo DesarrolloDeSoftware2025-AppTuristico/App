@@ -1,7 +1,8 @@
 ﻿using System;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp.Domain.Entities;
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.CalificacionesDestinos
 {
     public class CalificacionDestino : Entity<Guid>, IUserOwned
     {

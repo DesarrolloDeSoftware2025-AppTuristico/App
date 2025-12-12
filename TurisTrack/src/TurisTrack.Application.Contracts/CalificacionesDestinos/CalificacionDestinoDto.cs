@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.CalificacionesDestinos
 {
     public class CalificacionDestinoDto : EntityDto<Guid>
     {
