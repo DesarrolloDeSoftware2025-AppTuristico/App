@@ -1,5 +1,8 @@
 using AutoMapper;
+using TurisTrack.CalificacionesDestinos;
 using TurisTrack.DestinosTuristicos;
+using TurisTrack.Experiencias.Dtos;
+using TurisTrack.ExperienciasDeViajes;
 
 namespace TurisTrack;
 
@@ -16,5 +19,7 @@ public class TurisTrackApplicationAutoMapperProfile : Profile
         CreateMap<CreateUpdateDestinoTuristicoDto, DestinoTuristico>();
         CreateMap<CalificacionDestino, CalificacionDestinoDto>();
         CreateMap<CalificacionDestinoDto, CalificacionDestino>();
+        CreateMap<ExperienciaDeViaje, ExperienciaDeViajeDto>();
+        CreateMap<ExperienciaDeViajeDto, ExperienciaDeViaje>();
     }
 }

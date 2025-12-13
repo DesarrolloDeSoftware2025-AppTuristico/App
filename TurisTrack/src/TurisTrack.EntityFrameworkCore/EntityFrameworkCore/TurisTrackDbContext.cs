@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using TurisTrack.CalificacionesDestinos;
 using TurisTrack.DestinosTuristicos;
+using TurisTrack.ExperienciasDeViajes;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -28,6 +30,7 @@ public class TurisTrackDbContext :
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
     public DbSet<CalificacionDestino> CalificacionesDestino { get; set; }
+    public DbSet<ExperienciaDeViaje> ExperienciasDeViaje { get; set; }
 
 
     #region Entities from the modules
@@ -120,6 +123,16 @@ public class TurisTrackDbContext :
             
             // Filtro global para el usuario actual
             b.HasQueryFilter(x => x.UserId == _currentUser.Id);
+        });
+
+        builder.Entity<ExperienciaDeViaje>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "ExperienciasDeViajes", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.DestinoId).IsRequired();
+            b.Property(x => x.Comentario).IsRequired().HasMaxLength(5000);
+            b.Property(x => x.FechaVisita).IsRequired();
+            b.Property(x => x.Sentimiento).IsRequired().HasDefaultValue(SentimientoExperiencia.Neutral);
         });
     }
 }

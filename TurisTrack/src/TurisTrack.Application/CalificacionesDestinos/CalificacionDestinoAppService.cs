@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.CalificacionesDestinos
 {
     public class CalificacionDestinoAppService : ApplicationService
     {
@@ -29,7 +29,7 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         [Authorize]
-        public async Task<String> CrearCalificacionAsync(Guid destinoId, int puntuacion, string? comentario = null)
+        public async Task<string> CrearCalificacionAsync(Guid destinoId, int puntuacion, string? comentario = null)
         {
             // Verificar que el usuario esté autenticado
             if (!_currentUser.IsAuthenticated)
