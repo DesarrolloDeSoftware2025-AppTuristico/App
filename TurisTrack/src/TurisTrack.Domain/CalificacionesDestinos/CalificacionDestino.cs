@@ -1,10 +1,10 @@
 ﻿using System;
 using TurisTrack.DestinosTuristicos;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace TurisTrack.CalificacionesDestinos
 {
-    public class CalificacionDestino : Entity<Guid>, IUserOwned
+    public class CalificacionDestino : CreationAuditedEntity<Guid>, IUserOwned
     {
         public Guid UserId { get; set; } // usuario autenticado
         public Guid DestinoTuristicoId { get; set; }
