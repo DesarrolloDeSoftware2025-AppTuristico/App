@@ -38,19 +38,19 @@ namespace TurisTrack.DestinosTuristicos
             return await _geoDbService.BuscarDestinosAsync(nombre, pais, region, poblacionMinima);
         }
 
-        // 3.2 Obtener detalle de un destino (API externa)
+        // 3.3 Obtener detalle de un destino (API externa)
         public async Task<DestinoTuristicoDto> ObtenerDestinoPorIdAsync(int id)
         {
             return await _geoDbService.ObtenerDestinoPorIdAsync(id);
         }
 
-        // 3.3 Listar destinos populares (API externa)
+        // 3.4 Listar destinos populares (API externa)
         public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10)
         {
             return await _geoDbService.ListarDestinosPopularesAsync(limit);
         }
 
-        // 3.4 Guardar un destino en la base interna (SQL Server)
+        // 3.5 Guardar un destino en la base interna (SQL Server)
         public async Task<SaveResultDto> GuardarDestinoAsync(DestinoTuristicoDto destinoExterno) //int idApi)
         {
             // Buscar el destino en la API externa

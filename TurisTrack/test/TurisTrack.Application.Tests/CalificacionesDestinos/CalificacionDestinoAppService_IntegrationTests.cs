@@ -12,7 +12,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TurisTrack.CalificacionesDestinos;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
@@ -22,7 +22,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 using Xunit;
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.CalificacionesDestinos
 {
     public abstract class CalificacionDestinoAppService_IntegrationTests<TStartupModule> : TurisTrackApplicationTestBase<TStartupModule>
     where TStartupModule : IAbpModule
@@ -131,7 +131,7 @@ namespace TurisTrack.DestinosTuristicos
 
 
         // Metodos auxiliares
-        private async Task<String> CrearCalificacionPorIdAsync(Guid destinoId, Guid userId, int puntuacion, string? comentario = null)
+        private async Task<string> CrearCalificacionPorIdAsync(Guid destinoId, Guid userId, int puntuacion, string? comentario = null)
         {
 
             var calificacion = new CalificacionDestino(

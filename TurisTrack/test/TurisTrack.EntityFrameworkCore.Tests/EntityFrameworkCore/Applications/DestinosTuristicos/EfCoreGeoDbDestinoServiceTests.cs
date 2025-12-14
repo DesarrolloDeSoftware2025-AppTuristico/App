@@ -7,7 +7,7 @@ using TurisTrack.DestinosTuristicos;
 using TurisTrack.Tests.DestinosTuristicos;
 using Xunit;
 
-namespace TurisTrack.EntityFrameworkCore.Applications
+namespace TurisTrack.EntityFrameworkCore.Applications.DestinosTuristicos
 {
     [Collection(TurisTrackTestConsts.CollectionDefinitionName)]
     public class EfCoreGeoDbDestinoServiceTests : GeoDbDestinoServiceIntegrationTests<TurisTrackEntityFrameworkCoreTestModule>
