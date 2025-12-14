@@ -120,9 +120,9 @@ public class TurisTrackDbContext :
             b.HasOne(x => x.DestinoTuristico)
                 .WithMany()
                 .HasForeignKey(x => x.DestinoTuristicoId).IsRequired();
-            
-            // Filtro global para el usuario actual
-            b.HasQueryFilter(x => x.UserId == _currentUser.Id);
+
+            // Filtro global para el usuario actual pero que permite desactivarlo si es necesario
+            b.HasQueryFilter(x => !DataFilter.IsEnabled<IUserOwned>() || x.UserId == _currentUser.Id);
         });
 
         builder.Entity<ExperienciaDeViaje>(b =>
