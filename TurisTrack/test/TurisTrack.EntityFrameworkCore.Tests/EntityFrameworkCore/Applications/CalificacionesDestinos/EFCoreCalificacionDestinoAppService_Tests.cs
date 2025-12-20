@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TurisTrack.DestinosTuristicos;
+using TurisTrack.CalificacionesDestinos;
 using Xunit;
 
-namespace TurisTrack.EntityFrameworkCore.Applications
+namespace TurisTrack.EntityFrameworkCore.Applications.CalificacionesDestinos
 {
     [Collection(TurisTrackTestConsts.CollectionDefinitionName)]
     public class EFCoreCalificacionDestinoAppService_Tests : CalificacionDestinoAppService_Tests<TurisTrackEntityFrameworkCoreTestModule>

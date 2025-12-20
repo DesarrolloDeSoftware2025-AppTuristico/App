@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TurisTrack.CalificacionesDestinos;
+using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Xunit;
 
-namespace TurisTrack.DestinosTuristicos
+namespace TurisTrack.CalificacionesDestinos
 {
     public abstract class CalificacionDestinoAppService_Tests<TStartupModule> : TurisTrackApplicationTestBase<TStartupModule>
     where TStartupModule : IAbpModule
@@ -155,7 +155,7 @@ namespace TurisTrack.DestinosTuristicos
                 var response = await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5, "Excelente destino turístico!");
 
                 // Act
-                var exception = await Assert.ThrowsAsync<ApplicationException>(
+                var exception = await Assert.ThrowsAsync<UserFriendlyException>(
                     async () => await _serviceCalificaciones.CrearCalificacionAsync(destinoId, 5, "Excelente destino turístico!"));
 
                 // Assert

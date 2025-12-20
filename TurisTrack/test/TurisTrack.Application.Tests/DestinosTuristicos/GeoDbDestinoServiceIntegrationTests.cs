@@ -30,7 +30,6 @@ namespace TurisTrack.DestinosTuristicos
         [Fact]
         public async Task BuscarDestinosAsync_DeberiaDevolverResultadosReales()
         {
-
             {
                 await WithUnitOfWorkAsync(async () =>
                 {
@@ -111,6 +110,28 @@ namespace TurisTrack.DestinosTuristicos
 
 
 
+            });
+        }
+
+        [Fact]
+        public async Task ObtenerDestinoPorIdAsync_Deberia_Devolver_Un_Destino()
+        {
+            await WithUnitOfWorkAsync(async () =>
+            {
+                // Arrange
+                // Le pasamos el id 2 ya que es un destino conocido en la base de datos de GeoDB
+                int id = 2;
+
+                // Act
+                var resultado = await _geoDbService.ObtenerDestinoPorIdAsync(id);
+
+                // Assert
+                resultado.IdAPI.ShouldBe(2);
+                resultado.Nombre.ShouldBe("Akhtala");
+                resultado.Pais.ShouldBe("Armenia");
+                resultado.Region.ShouldBe("Lori Province");
+                resultado.Latitud.ShouldBe(41,14952);
+                resultado.Longitud.ShouldBe(44,78168);
             });
         }
 
