@@ -29,7 +29,7 @@ namespace TurisTrack.ExperienciasDeViajes
         [Authorize]
         public async Task<string> CrearExperienciaAsync(Guid destinoId, string comentario, DateTime fechaVisita)
         {
-            var destino = await _destinoRepository.GetAsync(destinoId);
+            var destino = await _destinoRepository.FindAsync(destinoId);
             if (destino == null)
             {
                 throw new UserFriendlyException("El destino turístico no existe.");
@@ -51,7 +51,11 @@ namespace TurisTrack.ExperienciasDeViajes
         [Authorize]
         public async Task<string> EditarExperienciaAsync(Guid experienciaId, string? comentario = null, DateTime? fechaVisita = null)
         {
-            var experiencia = await _experienciaRepository.GetAsync(experienciaId);
+            var experiencia = await _experienciaRepository.FindAsync(experienciaId);
+            if (experiencia == null)
+            {
+                throw new UserFriendlyException("La experiencia que busca no existe.");
+            }
 
             // Verificamos usando el campo heredado CreatorId
             if (experiencia.CreatorId != CurrentUser.Id)
@@ -78,7 +82,12 @@ namespace TurisTrack.ExperienciasDeViajes
         [Authorize]
         public async Task<string> EliminarExperienciaAsync(Guid experienciaId)
         {
-            var experiencia = await _experienciaRepository.GetAsync(experienciaId);
+            var experiencia = await _experienciaRepository.FindAsync(experienciaId);
+
+            if (experiencia == null)
+            {
+                throw new UserFriendlyException("La experiencia que busca no existe.");
+            }
 
             if (experiencia.CreatorId != CurrentUser.Id)
             {
