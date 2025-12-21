@@ -49,8 +49,7 @@ namespace TurisTrack.ExperienciasDeViajes
             var fechaVisita = DateTime.Now;
             var comentario = "Fue una experiencia inolvidable.";
 
-            var destinoGuardado = await _destinoRepository.FindAsync(d => d.Nombre == "Machu Picchu");
-            var destinoId = destinoGuardado.Id;
+            var destinoId = destino.Id;
 
             await WithUnitOfWorkAsync(async () =>
             {
@@ -106,8 +105,7 @@ namespace TurisTrack.ExperienciasDeViajes
             var nuevoComentario = "Comentario Editado";
             var nuevaFecha = DateTime.Now;
 
-            var experienciaGuardada = await _experienciaRepository.FindAsync(d => d.DestinoId == destinoId);
-            var experienciaId = experienciaGuardada.Id;
+            var experienciaId = experiencia.Id;
 
             var resultado = await _experienciaAppService.EditarExperienciaAsync(experienciaId, nuevoComentario, nuevaFecha);
 
@@ -133,8 +131,7 @@ namespace TurisTrack.ExperienciasDeViajes
             // 1. Insertamos siendo el DUEÑO (Admin)
             await _experienciaRepository.InsertAsync(experiencia);
                 
-            var experienciaGuardada = await _experienciaRepository.FindAsync(d => d.DestinoId == destinoId);
-            var experienciaId = experienciaGuardada.Id;
+            var experienciaId = experiencia.Id;
 
             // 2. Intentamos editar con otro usuario
             using (SimularLogin(usuarioHackerId))
@@ -178,8 +175,7 @@ namespace TurisTrack.ExperienciasDeViajes
 
             await _experienciaRepository.InsertAsync(experiencia);
 
-            var experienciaGuardada = await _experienciaRepository.FindAsync(d => d.DestinoId == destinoId);
-            var experienciaId = experienciaGuardada.Id;
+            var experienciaId = experiencia.Id;
 
             // ACT
             var resultado = await _experienciaAppService.EliminarExperienciaAsync(experienciaId);
@@ -205,8 +201,7 @@ namespace TurisTrack.ExperienciasDeViajes
             // 1. El dueño (Admin) crea la experiencia
             await _experienciaRepository.InsertAsync(experiencia);
 
-            var experienciaGuardada = await _experienciaRepository.FindAsync(d => d.DestinoId == destinoId);
-            var experienciaId = experienciaGuardada.Id;
+            var experienciaId = experiencia.Id;
 
             using (SimularLogin(hackerId)) // Ahora nos logueamos con otro usuario
             {
@@ -400,25 +395,6 @@ namespace TurisTrack.ExperienciasDeViajes
 
             // 4. Aseguramos que NO traiga el registro de "playa"
             resultado.ShouldNotContain(x => x.Comentario.Contains("playa"));
-        }
-
-
-
-        // --- MÉTODO MÁGICO PARA CAMBIAR DE USUARIO ---
-        private IDisposable SimularLogin(Guid userId)
-        {
-            var claims = new List<Claim>
-        {
-            new Claim(AbpClaimTypes.UserId, userId.ToString()),
-            new Claim(AbpClaimTypes.UserName, "usuario_test"),
-            new Claim(AbpClaimTypes.Email, "test@turistrack.com")
-        };
-
-            var identity = new ClaimsIdentity(claims, "TestAuth");
-            var principal = new ClaimsPrincipal(identity);
-
-            // Esto cambia el usuario para todo el contexto de ABP dentro del using
-            return _currentPrincipalAccessor.Change(principal);
         }
     }
 }

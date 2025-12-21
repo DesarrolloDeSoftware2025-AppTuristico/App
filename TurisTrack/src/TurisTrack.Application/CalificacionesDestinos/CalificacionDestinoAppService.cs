@@ -90,7 +90,11 @@ namespace TurisTrack.CalificacionesDestinos
         public async Task<String> EditarCalificacionAsync(Guid calificacionId, int? nuevaPuntuacion = null, string? nuevoComentario = null)
         {
             // 1. Obtener la calificación
-            var calificacion = await _calificacionRepository.GetAsync(calificacionId);
+            var calificacion = await _calificacionRepository.FindAsync(calificacionId);
+            if (calificacion == null)
+            {
+                throw new UserFriendlyException("La calificación que busca no existe.");
+            }
 
             // 2. Verificar que el usuario actual sea el dueño
             if (calificacion.UserId != _currentUser.GetId())
@@ -208,7 +212,6 @@ namespace TurisTrack.CalificacionesDestinos
                         dto.UserName = "Usuario eliminado"; // Por si el usuario ya no existe
                     }
                 }
-
                 return dtos;
             }
         }
