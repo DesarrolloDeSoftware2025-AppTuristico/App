@@ -31,6 +31,7 @@ public class TurisTrackDbContext :
     public DbSet<DestinoTuristico> DestinosTuristicos { get; set; }
     public DbSet<CalificacionDestino> CalificacionesDestino { get; set; }
     public DbSet<ExperienciaDeViaje> ExperienciasDeViaje { get; set; }
+    public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
 
 
     #region Entities from the modules
@@ -133,6 +134,15 @@ public class TurisTrackDbContext :
             b.Property(x => x.Comentario).IsRequired().HasMaxLength(5000);
             b.Property(x => x.FechaVisita).IsRequired();
             b.Property(x => x.Sentimiento).IsRequired().HasDefaultValue(SentimientoExperiencia.Neutral);
+        });
+
+        builder.Entity<DestinoFavorito>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "DestinosFavoritos", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            // Índice único para evitar duplicados (Mismo usuario, mismo destino)
+            b.HasIndex(x => new { x.UsuarioId, x.DestinoId }).IsUnique();
         });
     }
 }

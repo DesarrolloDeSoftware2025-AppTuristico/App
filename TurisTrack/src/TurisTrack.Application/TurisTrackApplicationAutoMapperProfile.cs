@@ -1,6 +1,7 @@
 using AutoMapper;
 using TurisTrack.CalificacionesDestinos;
 using TurisTrack.DestinosTuristicos;
+using TurisTrack.DestinosTuristicos.Dtos;
 using TurisTrack.Experiencias.Dtos;
 using TurisTrack.ExperienciasDeViajes;
 
@@ -21,5 +22,6 @@ public class TurisTrackApplicationAutoMapperProfile : Profile
         CreateMap<CalificacionDestinoDto, CalificacionDestino>();
         CreateMap<ExperienciaDeViaje, ExperienciaDeViajeDto>();
         CreateMap<ExperienciaDeViajeDto, ExperienciaDeViaje>();
+        CreateMap<DestinoTuristico, DestinoFavoritoDto>();
     }
 }
