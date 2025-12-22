@@ -1,17 +1,12 @@
-﻿using Moq;
-using Shouldly;
+﻿using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 using Xunit;
 

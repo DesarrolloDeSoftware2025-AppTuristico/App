@@ -61,13 +61,14 @@ namespace TurisTrack.DestinosTuristicos
 
             var favorito = await _favoritosRepository.FirstOrDefaultAsync(x => x.UsuarioId == usuarioId && x.DestinoId == destinoId);
 
-            if (favorito != null)
-            {
-                await _favoritosRepository.DeleteAsync(favorito);
-                return "Destino turístico eliminado de tus favoritos.";
+            if (favorito == null)
+            { 
+                return "El destino turístico no se encuentra en tus favoritos.";
             }
 
-            return "El destino turístico no se encuentra en tus favoritos.";
+            await _favoritosRepository.DeleteAsync(favorito);
+
+            return "Destino turístico eliminado de tus favoritos.";
         }
 
         // 6.3 Consultar lista personal de favoritos

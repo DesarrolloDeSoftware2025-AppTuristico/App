@@ -1,25 +1,11 @@
-﻿using Autofac.Core;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
-using Moq;
-using NSubstitute;
-using Shouldly;
+﻿using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using TurisTrack.DestinosTuristicos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Users;
 using Xunit;
 
 namespace TurisTrack.CalificacionesDestinos
