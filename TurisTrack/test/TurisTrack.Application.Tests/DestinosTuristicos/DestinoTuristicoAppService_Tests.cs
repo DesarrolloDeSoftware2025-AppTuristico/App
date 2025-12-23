@@ -2,14 +2,12 @@
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TurisTrack.APIExterna;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
-using Volo.Abp.Validation;
 using Xunit;
 
 namespace TurisTrack.Tests.DestinosTuristicos

@@ -1,8 +1,6 @@
 ﻿using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TurisTrack.DestinosTuristicos;
 using Volo.Abp;
@@ -10,7 +8,6 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
 using Xunit;
-using System.Security.Claims;        // Para Claim, ClaimsIdentity, ClaimsPrincipal
 using Volo.Abp.Security.Claims;      // Para ICurrentPrincipalAccessor y AbpClaimTypes
 
 namespace TurisTrack.ExperienciasDeViajes
@@ -21,16 +18,12 @@ namespace TurisTrack.ExperienciasDeViajes
         private readonly IExperienciaAppService _experienciaAppService;
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
         private readonly IRepository<ExperienciaDeViaje, Guid> _experienciaRepository;
-        private readonly ICurrentUser _currentUser;
-        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
         public ExperienciaAppService_UnitTest()
         {
             _experienciaAppService = GetRequiredService<IExperienciaAppService>();
             _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
             _experienciaRepository = GetRequiredService<IRepository<ExperienciaDeViaje, Guid>>();
-            _currentUser = GetRequiredService<ICurrentUser>();
-            _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
 
 
