@@ -4,6 +4,7 @@ using TurisTrack.DestinosTuristicos;
 using TurisTrack.DestinosTuristicos.Dtos;
 using TurisTrack.Experiencias.Dtos;
 using TurisTrack.ExperienciasDeViajes;
+using TurisTrack.Notificaciones;
 
 namespace TurisTrack;
 
@@ -23,5 +24,8 @@ public class TurisTrackApplicationAutoMapperProfile : Profile
         CreateMap<ExperienciaDeViaje, ExperienciaDeViajeDto>();
         CreateMap<ExperienciaDeViajeDto, ExperienciaDeViaje>();
         CreateMap<DestinoTuristico, DestinoFavoritoDto>();
+        CreateMap<Notificacion, NotificacionDto>()
+                // Ignoramos NombreDestino porque lo llenaremos manualmente después
+                .ForMember(dest => dest.NombreDestino, opt => opt.Ignore());
     }
 }
