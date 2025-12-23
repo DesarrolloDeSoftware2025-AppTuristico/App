@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TurisTrack.ExperienciasDeViajes;
-using TurisTrack.UserProfiles;
+﻿using TurisTrack.ExperienciasDeViajes;
 using Xunit;
 
 namespace TurisTrack.EntityFrameworkCore.Applications.ExperienciasDeViajes;
