@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace TurisTrack.Notificaciones
 {
-    public interface INotificacionAppService : IApplicationService
+    public interface INotificacionesAppService : IApplicationService
     {
         // 7.2 Notificar sobre cambios relevantes (usado por admins)
         Task<String> ReportarEventoEnDestinoAsync(CrearEventoDestinoDto input);

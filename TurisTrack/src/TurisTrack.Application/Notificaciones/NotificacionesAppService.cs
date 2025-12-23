@@ -15,7 +15,7 @@ using Volo.Abp.Identity;
 namespace TurisTrack.Notificaciones
 {
     [Authorize]
-    public class NotificacionesAppService : ApplicationService, INotificacionAppService
+    public class NotificacionesAppService : ApplicationService, INotificacionesAppService
     {
         private readonly IRepository<Notificacion, Guid> _notificacionRepository;
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;

@@ -4,6 +4,6 @@
     {
         Evento = 1,
         Clima = 2,
-        NoticiaGeneral = 3
+        General = 3
     }
 }
