@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TurisTrack.CalificacionesDestinos;
 using TurisTrack.DestinosTuristicos;
 using TurisTrack.ExperienciasDeViajes;
+using TurisTrack.Notificaciones;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -32,6 +33,7 @@ public class TurisTrackDbContext :
     public DbSet<CalificacionDestino> CalificacionesDestino { get; set; }
     public DbSet<ExperienciaDeViaje> ExperienciasDeViaje { get; set; }
     public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
+    public DbSet<Notificacion> Notificaciones { get; set; }
 
 
     #region Entities from the modules
@@ -143,6 +145,17 @@ public class TurisTrackDbContext :
 
             // Índice único para evitar duplicados (Mismo usuario, mismo destino)
             b.HasIndex(x => new { x.UsuarioId, x.DestinoId }).IsUnique();
+        });
+
+        builder.Entity<Notificacion>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "Notificaciones", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Titulo).IsRequired().HasMaxLength(128);
+            b.Property(x => x.Mensaje).IsRequired().HasMaxLength(500);
+
+            // Indice para buscar rápido las notificaciones de un usuario
+            b.HasIndex(x => x.UserId);
         });
     }
 }
