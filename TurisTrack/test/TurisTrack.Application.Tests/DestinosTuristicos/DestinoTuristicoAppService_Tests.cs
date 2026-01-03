@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TurisTrack.APIExterna;
 using TurisTrack.DestinosTuristicos;
+using TurisTrack.Metricas;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
@@ -24,6 +25,7 @@ namespace TurisTrack.Tests.DestinosTuristicos
         private readonly Mock<IRepository<DestinoTuristico, Guid>> _mockRepo;
         private readonly Mock<IGeoDbDestinoService> _mockGeoDbService;
         private readonly DestinoTuristicoAppService _appService;
+        private readonly Mock<IRepository<ApiMetrica, Guid>> _mockMetricasRepo;
 
 
         protected DestinoTuristicoAppService_Tests()
@@ -31,12 +33,18 @@ namespace TurisTrack.Tests.DestinosTuristicos
             //Prueba de la funcionalidad de guardar un destino turistico
             _service = GetRequiredService<DestinoTuristicoAppService>();
             _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
+            _mockMetricasRepo = new Mock<IRepository<ApiMetrica, Guid>>();
+
+            _mockMetricasRepo
+                .Setup(x => x.InsertAsync(It.IsAny<ApiMetrica>(), It.IsAny<bool>(), It.IsAny<System.Threading.CancellationToken>()))
+                .ReturnsAsync((ApiMetrica m, bool b, System.Threading.CancellationToken c) => m);
+
 
             //Prueba de la funcionalidad de buscar un destino turistico por nombre. Pais, region, poblacionMinima (Opcionales)
 
             _mockRepo = new Mock<IRepository<DestinoTuristico, Guid>>();
             _mockGeoDbService = new Mock<IGeoDbDestinoService>(); // no necesitamos HttpClient aquí
-            _appService = new DestinoTuristicoAppService(_mockRepo.Object, _mockGeoDbService.Object);
+            _appService = new DestinoTuristicoAppService(_mockRepo.Object, _mockGeoDbService.Object, _mockMetricasRepo.Object);
 
         }
 

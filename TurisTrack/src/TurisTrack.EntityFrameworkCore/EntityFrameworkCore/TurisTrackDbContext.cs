@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TurisTrack.CalificacionesDestinos;
 using TurisTrack.DestinosTuristicos;
 using TurisTrack.ExperienciasDeViajes;
+using TurisTrack.Metricas;
 using TurisTrack.Notificaciones;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -34,6 +35,7 @@ public class TurisTrackDbContext :
     public DbSet<ExperienciaDeViaje> ExperienciasDeViaje { get; set; }
     public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
     public DbSet<Notificacion> Notificaciones { get; set; }
+    public DbSet<ApiMetrica> ApiMetricas { get; set; }
 
 
     #region Entities from the modules
@@ -156,6 +158,12 @@ public class TurisTrackDbContext :
 
             // Indice para buscar rápido las notificaciones de un usuario
             b.HasIndex(x => x.UserId);
+        });
+
+        builder.Entity<ApiMetrica>(b =>
+        {
+            b.ToTable(TurisTrackConsts.DbTablePrefix + "ApiMetricas", TurisTrackConsts.DbSchema);
+            b.ConfigureByConvention();
         });
     }
 }
