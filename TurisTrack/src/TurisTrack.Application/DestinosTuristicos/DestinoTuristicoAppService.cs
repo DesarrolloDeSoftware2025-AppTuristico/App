@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TurisTrack.APIExterna;
 using TurisTrack.DestinosTuristicos;
+using TurisTrack.Metricas;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -16,38 +18,99 @@ namespace TurisTrack.DestinosTuristicos
     {
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
         private readonly IGeoDbDestinoService _geoDbService;
+        private readonly IRepository<ApiMetrica, Guid> _metricasRepository;
 
         public DestinoTuristicoAppService(
             IRepository<DestinoTuristico, Guid> destinoRepository,
-            IGeoDbDestinoService geoDbService)
+            IGeoDbDestinoService geoDbService,
+            IRepository<ApiMetrica, Guid> metricasRepository)
         {
             _destinoRepository = destinoRepository;
             _geoDbService = geoDbService;
+            _metricasRepository = metricasRepository;
         }
 
-        // 3.1 Buscar destinos (API externa)
+        // Método privado auxiliar para registrar la métrica sin repetir código
+        private async Task RegistrarMetricaAsync(string endpoint, string parametros, Stopwatch sw, bool exito, string error = null)
+        {
+            sw.Stop();
+            var metrica = new ApiMetrica(
+                endpoint,
+                parametros,
+                (int)sw.ElapsedMilliseconds,
+                exito,
+                error
+            );
+            await _metricasRepository.InsertAsync(metrica);
+        }
+
+        // 3.1 Buscar destinos (Modificado con monitoreo)
         public async Task<List<DestinoTuristicoDto>> BuscarDestinosAsync(string nombre, string? pais = null, string? region = null,
             int? poblacionMinima = null)
         {
-
             if (string.IsNullOrWhiteSpace(nombre))
             {
                 throw new BusinessException("El nombre del destino no puede ser nulo o vacío.");
             }
 
-            return await _geoDbService.BuscarDestinosAsync(nombre, pais, region, poblacionMinima);
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var result = await _geoDbService.BuscarDestinosAsync(nombre, pais, region, poblacionMinima);
+
+                // Registrar éxito
+                await RegistrarMetricaAsync("BuscarDestinos", $"nom:{nombre},pais:{pais}", sw, true);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Registrar fallo
+                await RegistrarMetricaAsync("BuscarDestinos", $"nom:{nombre}", sw, false, ex.Message);
+                throw;
+            }
         }
 
-        // 3.3 Obtener detalle de un destino (API externa)
+        //  3.3 Obtener detalle de un destino (API externa) - CON MONITOREO
         public async Task<DestinoTuristicoDto> ObtenerDestinoPorIdAsync(int id)
         {
-            return await _geoDbService.ObtenerDestinoPorIdAsync(id);
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var result = await _geoDbService.ObtenerDestinoPorIdAsync(id);
+
+                // Registrar éxito
+                await RegistrarMetricaAsync("ObtenerDestinoPorId", $"id:{id}", sw, true);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Registrar fallo
+                await RegistrarMetricaAsync("ObtenerDestinoPorId", $"id:{id}", sw, false, ex.Message);
+                throw;
+            }
         }
 
-        // 3.4 Listar destinos populares (API externa)
-        public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10)
+        //  3.4 Listar destinos populares (API externa) - CON MONITOREO
+        public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10) // Eliminé "limit = 10" si ya estaba definido en la interfaz, pero aquí lo dejo por defecto
         {
-            return await _geoDbService.ListarDestinosPopularesAsync(limit);
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var result = await _geoDbService.ListarDestinosPopularesAsync(limit);
+
+                // Registrar éxito
+                await RegistrarMetricaAsync("ListarDestinosPopulares", $"limit:{limit}", sw, true);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Registrar fallo
+                await RegistrarMetricaAsync("ListarDestinosPopulares", $"limit:{limit}", sw, false, ex.Message);
+                throw;
+            }
         }
 
         // 3.5 Guardar un destino en la base interna (SQL Server)

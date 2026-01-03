@@ -32,7 +32,7 @@ namespace TurisTrack.Notificaciones
         }
 
         // 7.2. Generar la notificación (Solo Admin)
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<String> ReportarEventoEnDestinoAsync(CrearEventoDestinoDto input)
         {
             // 1. Validar que el destino exista
