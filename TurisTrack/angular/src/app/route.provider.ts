@@ -24,5 +24,13 @@ function configureRoutes() {
         order: 2,
         layout: eLayoutType.application,
       },
+      {
+        path: '/metricas',
+        name: '::Menu:Metricas',
+        iconClass: 'fas fa-chart-line',
+        order: 3,
+        layout: eLayoutType.application,
+        requiredPolicy: 'AbpIdentity.Users'   // Para que lo vea solo el Admin
+      },
   ]);
 }
