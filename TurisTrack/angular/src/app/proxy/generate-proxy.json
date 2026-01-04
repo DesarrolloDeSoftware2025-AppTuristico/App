@@ -873,14 +873,146 @@
       "rootPath": "app",
       "remoteServiceName": "Default",
       "controllers": {
-        "TurisTrack.DestinosTuristicos.CalificacionDestinoAppService": {
+        "TurisTrack.CalificacionesDestinos.CalificacionDestinoAppService": {
           "controllerName": "CalificacionDestino",
           "controllerGroupName": "CalificacionDestino",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "TurisTrack.DestinosTuristicos.CalificacionDestinoAppService",
-          "interfaces": [],
+          "type": "TurisTrack.CalificacionesDestinos.CalificacionDestinoAppService",
+          "interfaces": [
+            {
+              "type": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService",
+              "name": "ICalificacionDestinoAppService",
+              "methods": [
+                {
+                  "name": "CrearCalificacionAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "puntuacion",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "comentario",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": true,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "ObtenerMisCalificacionesAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.CalificacionesDestinos.CalificacionDestinoDto>",
+                    "typeSimple": "[TurisTrack.CalificacionesDestinos.CalificacionDestinoDto]"
+                  }
+                },
+                {
+                  "name": "EditarCalificacionAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "calificacionId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "nuevaPuntuacion",
+                      "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Int32?",
+                      "typeSimple": "number?",
+                      "isOptional": true,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "nuevoComentario",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": true,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "EliminarCalificacionAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "calificacionId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "ObtenerPromedioDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "TurisTrack.CalificacionesDestinos.ResumenCalificacionDto",
+                    "typeSimple": "TurisTrack.CalificacionesDestinos.ResumenCalificacionDto"
+                  }
+                },
+                {
+                  "name": "ObtenerComentariosPorDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.CalificacionesDestinos.CalificacionDestinoDto>",
+                    "typeSimple": "[TurisTrack.CalificacionesDestinos.CalificacionDestinoDto]"
+                  }
+                }
+              ]
+            }
+          ],
           "actions": {
             "CrearCalificacionAsyncByDestinoIdAndPuntuacionAndComentario": {
               "uniqueName": "CrearCalificacionAsyncByDestinoIdAndPuntuacionAndComentario",
@@ -957,7 +1089,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": false,
-              "implementFrom": "TurisTrack.DestinosTuristicos.CalificacionDestinoAppService"
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
             },
             "ObtenerMisCalificacionesAsync": {
               "uniqueName": "ObtenerMisCalificacionesAsync",
@@ -968,11 +1100,199 @@
               "parametersOnMethod": [],
               "parameters": [],
               "returnValue": {
-                "type": "System.Collections.Generic.List<TurisTrack.DestinosTuristicos.CalificacionDestinoDto>",
-                "typeSimple": "[TurisTrack.DestinosTuristicos.CalificacionDestinoDto]"
+                "type": "System.Collections.Generic.List<TurisTrack.CalificacionesDestinos.CalificacionDestinoDto>",
+                "typeSimple": "[TurisTrack.CalificacionesDestinos.CalificacionDestinoDto]"
               },
               "allowAnonymous": false,
-              "implementFrom": "TurisTrack.DestinosTuristicos.CalificacionDestinoAppService"
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
+            },
+            "EditarCalificacionAsyncByCalificacionIdAndNuevaPuntuacionAndNuevoComentario": {
+              "uniqueName": "EditarCalificacionAsyncByCalificacionIdAndNuevaPuntuacionAndNuevoComentario",
+              "name": "EditarCalificacionAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion-destino/editar-calificacion/{calificacionId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "calificacionId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "nuevaPuntuacion",
+                  "typeAsString": "System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": true,
+                  "defaultValue": null
+                },
+                {
+                  "name": "nuevoComentario",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": true,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "calificacionId",
+                  "name": "calificacionId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "nuevaPuntuacion",
+                  "name": "nuevaPuntuacion",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "nuevoComentario",
+                  "name": "nuevoComentario",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
+            },
+            "EliminarCalificacionAsyncByCalificacionId": {
+              "uniqueName": "EliminarCalificacionAsyncByCalificacionId",
+              "name": "EliminarCalificacionAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion-destino/eliminar-calificacion/{calificacionId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "calificacionId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "calificacionId",
+                  "name": "calificacionId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
+            },
+            "ObtenerPromedioDestinoAsyncByDestinoId": {
+              "uniqueName": "ObtenerPromedioDestinoAsyncByDestinoId",
+              "name": "ObtenerPromedioDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion-destino/obtener-promedio-destino/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "TurisTrack.CalificacionesDestinos.ResumenCalificacionDto",
+                "typeSimple": "TurisTrack.CalificacionesDestinos.ResumenCalificacionDto"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
+            },
+            "ObtenerComentariosPorDestinoAsyncByDestinoId": {
+              "uniqueName": "ObtenerComentariosPorDestinoAsyncByDestinoId",
+              "name": "ObtenerComentariosPorDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion-destino/obtener-comentarios-por-destino/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.CalificacionesDestinos.CalificacionDestinoDto>",
+                "typeSimple": "[TurisTrack.CalificacionesDestinos.CalificacionDestinoDto]"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "TurisTrack.CalificacionesDestinos.ICalificacionDestinoAppService"
             }
           }
         },
@@ -1207,6 +1527,961 @@
               },
               "allowAnonymous": null,
               "implementFrom": "TurisTrack.DestinosTuristicos.DestinoTuristicoAppService"
+            }
+          }
+        },
+        "TurisTrack.DestinosTuristicos.FavoritosAppService": {
+          "controllerName": "Favoritos",
+          "controllerGroupName": "Favoritos",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "TurisTrack.DestinosTuristicos.FavoritosAppService",
+          "interfaces": [
+            {
+              "type": "TurisTrack.DestinosTuristicos.IFavoritosAppService",
+              "name": "IFavoritosAppService",
+              "methods": [
+                {
+                  "name": "AgregarFavoritoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "EliminarFavoritoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "GetListaFavoritosAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.DestinosTuristicos.Dtos.DestinoFavoritoDto>",
+                    "typeSimple": "[TurisTrack.DestinosTuristicos.Dtos.DestinoFavoritoDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "AgregarFavoritoAsyncByDestinoId": {
+              "uniqueName": "AgregarFavoritoAsyncByDestinoId",
+              "name": "AgregarFavoritoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/favoritos/agregar-favorito/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.DestinosTuristicos.IFavoritosAppService"
+            },
+            "EliminarFavoritoAsyncByDestinoId": {
+              "uniqueName": "EliminarFavoritoAsyncByDestinoId",
+              "name": "EliminarFavoritoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/favoritos/eliminar-favorito/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.DestinosTuristicos.IFavoritosAppService"
+            },
+            "GetListaFavoritosAsync": {
+              "uniqueName": "GetListaFavoritosAsync",
+              "name": "GetListaFavoritosAsync",
+              "httpMethod": "GET",
+              "url": "api/app/favoritos/a-favoritos",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.DestinosTuristicos.Dtos.DestinoFavoritoDto>",
+                "typeSimple": "[TurisTrack.DestinosTuristicos.Dtos.DestinoFavoritoDto]"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.DestinosTuristicos.IFavoritosAppService"
+            }
+          }
+        },
+        "TurisTrack.ExperienciasDeViajes.ExperienciaAppService": {
+          "controllerName": "Experiencia",
+          "controllerGroupName": "Experiencia",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "TurisTrack.ExperienciasDeViajes.ExperienciaAppService",
+          "interfaces": [
+            {
+              "type": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService",
+              "name": "IExperienciaAppService",
+              "methods": [
+                {
+                  "name": "CrearExperienciaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "comentario",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "fechaVisita",
+                      "typeAsString": "System.DateTime, System.Private.CoreLib",
+                      "type": "System.DateTime",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "EditarExperienciaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "experienciaId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "comentario",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": true,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "fechaVisita",
+                      "typeAsString": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.DateTime?",
+                      "typeSimple": "string?",
+                      "isOptional": true,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "EliminarExperienciaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "experienciaId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "ObtenerExperienciasDeOtrosAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                    "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+                  }
+                },
+                {
+                  "name": "FiltrarPorSentimientoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "sentimiento",
+                      "typeAsString": "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia, TurisTrack.Domain.Shared",
+                      "type": "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia",
+                      "typeSimple": "enum",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                    "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+                  }
+                },
+                {
+                  "name": "BuscarPorPalabraClaveAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "palabraClave",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                    "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CrearExperienciaAsyncByDestinoIdAndComentarioAndFechaVisita": {
+              "uniqueName": "CrearExperienciaAsyncByDestinoIdAndComentarioAndFechaVisita",
+              "name": "CrearExperienciaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/crear-experiencia/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "comentario",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "fechaVisita",
+                  "typeAsString": "System.DateTime, System.Private.CoreLib",
+                  "type": "System.DateTime",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "comentario",
+                  "name": "comentario",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "fechaVisita",
+                  "name": "fechaVisita",
+                  "jsonName": null,
+                  "type": "System.DateTime",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            },
+            "EditarExperienciaAsyncByExperienciaIdAndComentarioAndFechaVisita": {
+              "uniqueName": "EditarExperienciaAsyncByExperienciaIdAndComentarioAndFechaVisita",
+              "name": "EditarExperienciaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/editar-experiencia/{experienciaId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "experienciaId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "comentario",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": true,
+                  "defaultValue": null
+                },
+                {
+                  "name": "fechaVisita",
+                  "typeAsString": "System.Nullable`1[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": true,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "experienciaId",
+                  "name": "experienciaId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "comentario",
+                  "name": "comentario",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "fechaVisita",
+                  "name": "fechaVisita",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            },
+            "EliminarExperienciaAsyncByExperienciaId": {
+              "uniqueName": "EliminarExperienciaAsyncByExperienciaId",
+              "name": "EliminarExperienciaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/eliminar-experiencia/{experienciaId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "experienciaId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "experienciaId",
+                  "name": "experienciaId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            },
+            "ObtenerExperienciasDeOtrosAsyncByDestinoId": {
+              "uniqueName": "ObtenerExperienciasDeOtrosAsyncByDestinoId",
+              "name": "ObtenerExperienciasDeOtrosAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/obtener-experiencias-de-otros/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            },
+            "FiltrarPorSentimientoAsyncByDestinoIdAndSentimiento": {
+              "uniqueName": "FiltrarPorSentimientoAsyncByDestinoIdAndSentimiento",
+              "name": "FiltrarPorSentimientoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/filtrar-por-sentimiento/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "sentimiento",
+                  "typeAsString": "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia, TurisTrack.Domain.Shared",
+                  "type": "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia",
+                  "typeSimple": "enum",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "sentimiento",
+                  "name": "sentimiento",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            },
+            "BuscarPorPalabraClaveAsyncByPalabraClave": {
+              "uniqueName": "BuscarPorPalabraClaveAsyncByPalabraClave",
+              "name": "BuscarPorPalabraClaveAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia/buscar-por-palabra-clave",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "palabraClave",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "palabraClave",
+                  "name": "palabraClave",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto>",
+                "typeSimple": "[TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "TurisTrack.ExperienciasDeViajes.IExperienciaAppService"
+            }
+          }
+        },
+        "TurisTrack.Metricas.AdminMetricasAppService": {
+          "controllerName": "AdminMetricas",
+          "controllerGroupName": "AdminMetricas",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "TurisTrack.Metricas.AdminMetricasAppService",
+          "interfaces": [],
+          "actions": {
+            "ObtenerMetricasUsoAsync": {
+              "uniqueName": "ObtenerMetricasUsoAsync",
+              "name": "ObtenerMetricasUsoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/admin-metricas/obtener-metricas-uso",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "TurisTrack.Metricas.ApiMetricaResumenDto",
+                "typeSimple": "TurisTrack.Metricas.ApiMetricaResumenDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.Metricas.AdminMetricasAppService"
+            }
+          }
+        },
+        "TurisTrack.Notificaciones.NotificacionesAppService": {
+          "controllerName": "Notificaciones",
+          "controllerGroupName": "Notificaciones",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "TurisTrack.Notificaciones.NotificacionesAppService",
+          "interfaces": [
+            {
+              "type": "TurisTrack.Notificaciones.INotificacionesAppService",
+              "name": "INotificacionesAppService",
+              "methods": [
+                {
+                  "name": "ReportarEventoEnDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "TurisTrack.Notificaciones.CrearEventoDestinoDto, TurisTrack.Application.Contracts",
+                      "type": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                      "typeSimple": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string"
+                  }
+                },
+                {
+                  "name": "MarcarComoLeidaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "MarcarComoNoLeidaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "idNotificacion",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ObtenerMisNotificacionesAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.Notificaciones.NotificacionDto>",
+                    "typeSimple": "[TurisTrack.Notificaciones.NotificacionDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ReportarEventoEnDestinoAsyncByInput": {
+              "uniqueName": "ReportarEventoEnDestinoAsyncByInput",
+              "name": "ReportarEventoEnDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificaciones/reportar-evento-en-destino",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "TurisTrack.Notificaciones.CrearEventoDestinoDto, TurisTrack.Application.Contracts",
+                  "type": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                  "typeSimple": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                  "typeSimple": "TurisTrack.Notificaciones.CrearEventoDestinoDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.Notificaciones.INotificacionesAppService"
+            },
+            "MarcarComoLeidaAsyncByIdNotificacion": {
+              "uniqueName": "MarcarComoLeidaAsyncByIdNotificacion",
+              "name": "MarcarComoLeidaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificaciones/marcar-como-leida",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "idNotificacion",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "idNotificacion",
+                  "name": "idNotificacion",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.Notificaciones.INotificacionesAppService"
+            },
+            "MarcarComoNoLeidaAsyncByIdNotificacion": {
+              "uniqueName": "MarcarComoNoLeidaAsyncByIdNotificacion",
+              "name": "MarcarComoNoLeidaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificaciones/marcar-como-no-leida",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "idNotificacion",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "idNotificacion",
+                  "name": "idNotificacion",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.Notificaciones.INotificacionesAppService"
+            },
+            "ObtenerMisNotificacionesAsync": {
+              "uniqueName": "ObtenerMisNotificacionesAsync",
+              "name": "ObtenerMisNotificacionesAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificaciones/obtener-mis-notificaciones",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.Notificaciones.NotificacionDto>",
+                "typeSimple": "[TurisTrack.Notificaciones.NotificacionDto]"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.Notificaciones.INotificacionesAppService"
+            }
+          }
+        },
+        "TurisTrack.UserProfiles.UserProfileAppService": {
+          "controllerName": "UserProfile",
+          "controllerGroupName": "UserProfile",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "TurisTrack.UserProfiles.UserProfileAppService",
+          "interfaces": [
+            {
+              "type": "TurisTrack.UserProfiles.IUserProfileAppService",
+              "name": "IUserProfileAppService",
+              "methods": [
+                {
+                  "name": "DeleteMyAccountAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPublicProfileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "userId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "TurisTrack.UserProfiles.PublicUserProfileDto",
+                    "typeSimple": "TurisTrack.UserProfiles.PublicUserProfileDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "DeleteMyAccountAsync": {
+              "uniqueName": "DeleteMyAccountAsync",
+              "name": "DeleteMyAccountAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/user-profile/my-account",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "TurisTrack.UserProfiles.IUserProfileAppService"
+            },
+            "GetPublicProfileAsyncByUserId": {
+              "uniqueName": "GetPublicProfileAsyncByUserId",
+              "name": "GetPublicProfileAsync",
+              "httpMethod": "GET",
+              "url": "api/app/user-profile/public-profile/{userId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "userId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "userId",
+                  "name": "userId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "TurisTrack.UserProfiles.PublicUserProfileDto",
+                "typeSimple": "TurisTrack.UserProfiles.PublicUserProfileDto"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "TurisTrack.UserProfiles.IUserProfileAppService"
             }
           }
         }
@@ -3417,7 +4692,7 @@
     }
   },
   "types": {
-    "TurisTrack.DestinosTuristicos.CalificacionDestinoDto": {
+    "TurisTrack.CalificacionesDestinos.CalificacionDestinoDto": {
       "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
       "isEnum": false,
       "enumNames": null,
@@ -3428,6 +4703,18 @@
           "name": "UserId",
           "jsonName": null,
           "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
           "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
@@ -3465,6 +4752,51 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreationTime",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.CalificacionesDestinos.ResumenCalificacionDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Promedio",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TotalCalificaciones",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -3840,6 +5172,63 @@
         }
       ]
     },
+    "TurisTrack.DestinosTuristicos.Dtos.DestinoFavoritoDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Pais",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Latitud",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Longitud",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "TurisTrack.DestinosTuristicos.SaveResultDto": {
       "baseType": null,
       "isEnum": false,
@@ -3888,6 +5277,407 @@
           "jsonName": null,
           "type": "System.Int32",
           "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.Experiencias.Dtos.ExperienciaDeViajeDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Comentario",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FechaVisita",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Sentimiento",
+          "jsonName": null,
+          "type": "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreationTime",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreatorId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.ExperienciasDeViajes.SentimientoExperiencia": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "Neutral",
+        "Positiva",
+        "Negativa"
+      ],
+      "enumValues": [
+        0,
+        1,
+        2
+      ],
+      "genericArguments": null,
+      "properties": null
+    },
+    "TurisTrack.Metricas.ApiMetricaResumenDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "TotalPeticiones",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "PeticionesExitosas",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "PeticionesFallidas",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TiempoPromedioMs",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "EndpointMasLento",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TasaErroresPorcentaje",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.Notificaciones.CrearEventoDestinoDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Titulo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Mensaje",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Tipo",
+          "jsonName": null,
+          "type": "TurisTrack.Notificaciones.TipoNotificacion",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.Notificaciones.NotificacionDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NombreDestino",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Titulo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Mensaje",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Tipo",
+          "jsonName": null,
+          "type": "TurisTrack.Notificaciones.TipoNotificacion",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Leido",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreationTime",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "TurisTrack.Notificaciones.TipoNotificacion": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "Evento",
+        "Clima",
+        "General"
+      ],
+      "enumValues": [
+        1,
+        2,
+        3
+      ],
+      "genericArguments": null,
+      "properties": null
+    },
+    "TurisTrack.UserProfiles.PublicUserProfileDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Name",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Surname",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Foto",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,

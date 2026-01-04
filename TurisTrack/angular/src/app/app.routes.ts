@@ -24,4 +24,10 @@ export const APP_ROUTES: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./destinos/lista-destinos/lista-destinos').then(c => c.ListaDestinos),
   },
+
+  {
+    path: 'metricas',
+    canActivate: [authGuard, permissionGuard],
+    loadComponent: () => import('./admin/dashboard-metricas/dashboard-metricas').then(c => c.DashboardMetricas),
+  },
 ];

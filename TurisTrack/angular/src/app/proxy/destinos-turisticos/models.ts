@@ -1,11 +1,4 @@
-import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
-
-export interface CalificacionDestinoDto extends EntityDto<string> {
-  userId?: string;
-  destinoTuristicoId?: string;
-  puntuacion: number;
-  comentario?: string;
-}
+import type { EntityDto } from '@abp/ng.core';
 
 export interface DestinoTuristicoDto extends EntityDto<string> {
   idAPI: number;
@@ -48,5 +41,3 @@ export interface SaveResultDto {
   idInterno?: string;
   idApi: number;
 }
-
-
