@@ -23,6 +23,15 @@ export class UserProfileService {
       url: `/api/app/user-profile/public-profile/${userId}`,
     },
     { apiName: this.apiName,...config });
+  
+
+  searchUsers = (input: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, PublicUserProfileDto[]>({
+      method: 'POST',
+      url: '/api/app/user-profile/search-users',
+      params: { input },
+    },
+    { apiName: this.apiName,...config });
 
   constructor(private restService: RestService) {}
 }

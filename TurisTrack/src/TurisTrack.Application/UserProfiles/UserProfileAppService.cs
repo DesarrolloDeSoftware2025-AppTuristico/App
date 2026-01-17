@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Data; // Necesario para .GetProperty
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
@@ -13,10 +16,14 @@ namespace TurisTrack.UserProfiles
     public class UserProfileAppService : TurisTrackAppService, IUserProfileAppService
     {
         private readonly IdentityUserManager _userManager;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
-        public UserProfileAppService(IdentityUserManager userManager)
+        public UserProfileAppService(
+            IdentityUserManager userManager,
+            IRepository<IdentityUser, Guid> userRepository) 
         {
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         // 1.5 Eliminar cuenta propia
@@ -62,6 +69,48 @@ namespace TurisTrack.UserProfiles
                 Surname = user.Surname,
                 Foto = user.GetProperty<string>("Foto")
             };
+        }
+
+        // 1.7 Buscar usuarios por texto
+        [AllowAnonymous]
+        public async Task<List<PublicUserProfileDto>> SearchUsersAsync(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return new List<PublicUserProfileDto>();
+            }
+
+            var queryInput = input.ToLower();
+
+            // 3. OBTENEMOS EL IQUERYABLE DEL REPOSITORIO (Forma segura en ABP)
+            var queryable = await _userRepository.GetQueryableAsync();
+
+            var query = queryable
+                .Where(u => u.UserName.Contains(queryInput) ||
+                            u.Name.Contains(queryInput) ||
+                            u.Surname.Contains(queryInput) ||
+                            (u.Name + " " + u.Surname).Contains(queryInput))
+                .Take(20);
+
+            // Ejecutamos usando AsyncExecuter
+            var users = await AsyncExecuter.ToListAsync(query);
+
+            // Mapeamos
+            var result = new List<PublicUserProfileDto>();
+
+            foreach (var user in users)
+            {
+                result.Add(new PublicUserProfileDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Foto = user.GetProperty<string>("Foto")
+                });
+            }
+
+            return result;
         }
     }
 }

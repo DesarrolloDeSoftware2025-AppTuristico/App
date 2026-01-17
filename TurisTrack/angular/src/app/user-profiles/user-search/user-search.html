@@ -1,0 +1,52 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Buscar Usuarios</h2>
+
+  <div class="input-group mb-4 shadow-sm">
+    <input type="text" 
+           class="form-control form-control-lg" 
+           placeholder="Nombre, apellido o usuario..." 
+           [(ngModel)]="searchText"
+           (keyup.enter)="buscar()"> <button class="btn btn-primary px-4" type="button" (click)="buscar()" [disabled]="loading">
+      <i class="fa fa-search me-2"></i> Buscar
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="hasSearched && !loading && users.length === 0" class="alert alert-warning text-center">
+    No se encontraron usuarios que coincidan con "{{ searchText }}".
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-3" *ngFor="let user of users">
+      
+      <div class="card h-100 shadow-sm cursor-pointer" [routerLink]="['/perfil-publico', user.id]" style="cursor: pointer;">
+        <div class="card-body d-flex align-items-center">
+          
+          <div class="flex-shrink-0 me-3">
+             <img *ngIf="user.foto" [src]="user.foto" class="rounded-circle" width="60" height="60" style="object-fit: cover;">
+             
+             <div *ngIf="!user.foto" 
+                  class="d-flex justify-content-center align-items-center bg-secondary text-white fw-bold rounded-circle"
+                  style="width: 60px; height: 60px; font-size: 1.2rem;">
+                  {{ getIniciales(user) }}
+             </div>
+          </div>
+
+          <div>
+            <h5 class="card-title mb-0">{{ user.name }} {{ user.surname }}</h5>
+            <small class="text-muted">&#64;{{ user.userName }}</small>
+          </div>
+
+          <div class="ms-auto text-muted">
+            <i class="fa fa-chevron-right"></i>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

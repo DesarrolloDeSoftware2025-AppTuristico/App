@@ -32,5 +32,12 @@ function configureRoutes() {
         layout: eLayoutType.application,
         requiredPolicy: 'AbpIdentity.Users'   // Para que lo vea solo el Admin
       },
+      {
+        path: '/buscar-usuarios',
+        name: '::Menu:Buscar Usuarios',
+        iconClass: 'fas fa-users',
+        order: 4,
+        layout: eLayoutType.application,
+      },
   ]);
 }
