@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
@@ -11,5 +12,7 @@ namespace TurisTrack.UserProfiles
 
         // 1.6 Consultar perfil público
         Task<PublicUserProfileDto> GetPublicProfileAsync(Guid userId);
+
+        Task<List<PublicUserProfileDto>> SearchUsersAsync(string input);
     }
 }
