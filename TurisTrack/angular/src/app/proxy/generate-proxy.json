@@ -1,5 +1,6 @@
 {
   "generated": [
+    "account",
     "app"
   ],
   "modules": {
@@ -2426,6 +2427,23 @@
                     "type": "TurisTrack.UserProfiles.PublicUserProfileDto",
                     "typeSimple": "TurisTrack.UserProfiles.PublicUserProfileDto"
                   }
+                },
+                {
+                  "name": "SearchUsersAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<TurisTrack.UserProfiles.PublicUserProfileDto>",
+                    "typeSimple": "[TurisTrack.UserProfiles.PublicUserProfileDto]"
+                  }
                 }
               ]
             }
@@ -2479,6 +2497,43 @@
               "returnValue": {
                 "type": "TurisTrack.UserProfiles.PublicUserProfileDto",
                 "typeSimple": "TurisTrack.UserProfiles.PublicUserProfileDto"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "TurisTrack.UserProfiles.IUserProfileAppService"
+            },
+            "SearchUsersAsyncByInput": {
+              "uniqueName": "SearchUsersAsyncByInput",
+              "name": "SearchUsersAsync",
+              "httpMethod": "POST",
+              "url": "api/app/user-profile/search-users",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<TurisTrack.UserProfiles.PublicUserProfileDto>",
+                "typeSimple": "[TurisTrack.UserProfiles.PublicUserProfileDto]"
               },
               "allowAnonymous": true,
               "implementFrom": "TurisTrack.UserProfiles.IUserProfileAppService"

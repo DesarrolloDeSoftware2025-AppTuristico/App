@@ -30,4 +30,18 @@ export const APP_ROUTES: Routes = [
     canActivate: [authGuard, permissionGuard],
     loadComponent: () => import('./admin/dashboard-metricas/dashboard-metricas').then(c => c.DashboardMetricas),
   },
+
+  {
+    path: 'perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./user-profiles/my-account/my-account').then(c => c.MyAccountComponent),
+  },
+  {
+    path: 'perfil-publico/:id',
+    loadComponent: () => import('./user-profiles/public-profile/public-profile').then(c => c.PublicProfileComponent),
+  },
+  {
+    path: 'buscar-usuarios',
+    loadComponent: () => import('./user-profiles/user-search/user-search').then(c => c.UserSearchComponent),
+  },
 ];

@@ -6,7 +6,6 @@ import { DestinoTuristicoService } from '../../proxy/destinos-turisticos/destino
 import { DestinoTuristicoDto } from '../../proxy/destinos-turisticos/models';
 import { finalize } from 'rxjs/operators';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-destinations-list',

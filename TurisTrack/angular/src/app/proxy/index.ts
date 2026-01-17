@@ -5,4 +5,5 @@ import * as ExperienciasDeViajes from './experiencias-de-viajes';
 import * as Metricas from './metricas';
 import * as Notificaciones from './notificaciones';
 import * as UserProfiles from './user-profiles';
-export { CalificacionesDestinos, DestinosTuristicos, Experiencias, ExperienciasDeViajes, Metricas, Notificaciones, UserProfiles };
+import * as Volo from './volo';
+export { CalificacionesDestinos, DestinosTuristicos, Experiencias, ExperienciasDeViajes, Metricas, Notificaciones, UserProfiles, Volo };
