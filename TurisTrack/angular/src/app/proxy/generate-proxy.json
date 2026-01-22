@@ -5025,6 +5025,18 @@
           "regex": null
         },
         {
+          "name": "EstaGuardado",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "Eliminado",
           "jsonName": null,
           "type": "System.Boolean",

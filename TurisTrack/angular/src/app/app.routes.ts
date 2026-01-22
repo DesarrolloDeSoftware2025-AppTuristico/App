@@ -20,11 +20,18 @@ export const APP_ROUTES: Routes = [
     loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),
   },
   {
-    path: 'destinos',
+    path: 'destinos/buscar',
     canActivate: [authGuard],
     loadComponent: () => import('./destinos/lista-destinos/lista-destinos').then(c => c.ListaDestinos),
   },
-
+    {
+    path: 'destinos/populares',
+    loadComponent: () => import('./destinos/destinos-populares/destinos-populares').then(c => c.DestinosPopulares),
+  },
+  {
+    path: 'destinos/:id',
+    loadComponent: () => import('./destinos/detalle-destino/detalle-destino').then(c => c.DetalleDestino),
+  },
   {
     path: 'metricas',
     canActivate: [authGuard, permissionGuard],
@@ -44,4 +51,5 @@ export const APP_ROUTES: Routes = [
     path: 'buscar-usuarios',
     loadComponent: () => import('./user-profiles/user-search/user-search').then(c => c.UserSearchComponent),
   },
+  
 ];

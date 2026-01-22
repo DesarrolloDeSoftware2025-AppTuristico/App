@@ -80,7 +80,12 @@
       <!-- GRID DE DATOS (SIN IMÁGENES) -->
       <div class="destinations-grid" *ngIf="!loading && pagedDestinations.length > 0">
 
-        <div class="destination-card" *ngFor="let destination of pagedDestinations">
+        <div class="destination-card" 
+     *ngFor="let destination of pagedDestinations"
+     [routerLink]="['/destinos', destination.idAPI]"
+     style="cursor: pointer; transition: transform 0.2s;"
+     (mouseover)="this.style.transform='scale(1.02)'" 
+     (mouseout)="this.style.transform='scale(1)'">
 
           <div class="destination-content">
 
