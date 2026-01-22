@@ -79,6 +79,8 @@ namespace TurisTrack.DestinosTuristicos
             {
                 var result = await _geoDbService.ObtenerDestinoPorIdAsync(id);
 
+                result.EstaGuardado = await _destinoRepository.AnyAsync(d => d.IdAPI == id);
+
                 // Registrar éxito
                 await RegistrarMetricaAsync("ObtenerDestinoPorId", $"id:{id}", sw, true);
 

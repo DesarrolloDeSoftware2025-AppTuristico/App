@@ -14,6 +14,7 @@ export interface DestinoTuristicoDto extends EntityDto<string> {
   poblacion: number;
   zonaHoraria?: string;
   foto?: string;
+  estaGuardado: boolean;
   eliminado: boolean;
 }
 

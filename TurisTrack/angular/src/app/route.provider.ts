@@ -18,11 +18,29 @@ function configureRoutes() {
         layout: eLayoutType.application,
       },
       {
-        path: '/destinos',
-        name: '::Menu:Destinos',
+        path: '/destinos', 
+        name: 'Destinos',  
         iconClass: 'fas fa-map-marked-alt',
         order: 2,
         layout: eLayoutType.application,
+      },
+
+      // BUSCADOR (HIJO) 
+      {
+        path: '/destinos/buscar',
+        name: 'Explorar Destinos', 
+        parentName: 'Destinos',   
+        layout: eLayoutType.application,
+        iconClass: 'fas fa-search'
+      },
+
+      // POPULARES (HIJO)
+      {
+        path: '/destinos/populares',
+        name: 'Destinos Populares',
+        parentName: 'Destinos',    
+        layout: eLayoutType.application,
+        iconClass: 'fas fa-star'
       },
       {
         path: '/metricas',
