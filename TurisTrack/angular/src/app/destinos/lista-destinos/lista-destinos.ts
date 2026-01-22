@@ -6,11 +6,12 @@ import { DestinoTuristicoService } from '../../proxy/destinos-turisticos/destino
 import { DestinoTuristicoDto } from '../../proxy/destinos-turisticos/models';
 import { finalize } from 'rxjs/operators';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-destinations-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, CoreModule, NgbPaginationModule],
+  imports: [CommonModule, FormsModule, CoreModule, NgbPaginationModule, RouterModule],
   templateUrl: './lista-destinos.html',
   styleUrls: ['./lista-destinos.scss'],
 })

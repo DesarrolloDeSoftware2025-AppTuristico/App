@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><i class="fa fa-star text-warning me-2"></i>Destinos Populares</h2>
+    
+    <div class="d-flex align-items-center">
+        <label class="me-2 fw-bold text-muted">Mostrar:</label>
+        <div class="input-group" style="width: 150px;">
+            <input type="number" 
+                   class="form-control" 
+                   [(ngModel)]="cantidad" 
+                   min="1" 
+                   max="50"
+                   (keyup.enter)="cargarPopulares()">
+            <button class="btn btn-primary" 
+                    type="button" 
+                    (click)="cargarPopulares()" 
+                    [disabled]="loading">
+                <i class="fa fa-sync-alt" [ngClass]="{'fa-spin': loading}"></i>
+            </button>
+        </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Consultando a GeoDB...</p>
+  </div>
+
+  <div class="row" *ngIf="!loading">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let destino of populares">
+      <div class="card border-0 shadow-sm h-100 destination-card-hover">
+        <div class="card-body text-center d-flex flex-column">
+           
+           <div class="mb-3">
+               <i class="fa fa-map-marked-alt text-primary fa-3x opacity-50"></i>
+           </div>
+
+           <h4 class="card-title text-dark fw-bold">{{ destino.nombre }}</h4>
+           <h6 class="text-muted mb-3">{{ destino.pais }}</h6>
+           
+           <div class="mt-auto">
+               <hr>
+               <div class="d-flex justify-content-center text-muted small px-3 mb-3">
+                   <span><i class="fa fa-users me-1"></i> {{ destino.poblacion | number }}</span>
+               </div>
+               
+               <a [routerLink]="['/destinos', destino.idAPI]" class="btn btn-outline-primary rounded-pill w-100 stretched-link">
+                 Ver Detalles
+               </a>
+           </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && populares.length === 0" class="text-center text-muted py-5">
+      <i class="fa fa-info-circle fa-2x mb-3"></i>
+      <p>No se encontraron destinos populares.</p>
+  </div>
+</div>

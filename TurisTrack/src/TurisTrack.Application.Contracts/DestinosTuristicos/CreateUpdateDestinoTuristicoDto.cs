@@ -21,7 +21,7 @@ namespace TurisTrack.DestinosTuristicos
         public double Longitud { get; set; }
         public double Poblacion { get; set; }
         public string ZonaHoraria { get; set; }
-        public string Foto { get; set; }
+        public string? Foto { get; set; }
         public Boolean Eliminado { get; set; }
     }
 }
