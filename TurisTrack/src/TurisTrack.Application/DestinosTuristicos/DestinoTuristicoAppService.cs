@@ -72,23 +72,31 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         //  3.3 Obtener detalle de un destino (API externa) - CON MONITOREO
-        public async Task<DestinoTuristicoDto> ObtenerDestinoPorIdAsync(int id)
-        {
+       public async Task<DestinoTuristicoDto> ObtenerDestinoPorIdAsync(int id)
+{
             var sw = Stopwatch.StartNew();
             try
             {
+      
                 var result = await _geoDbService.ObtenerDestinoPorIdAsync(id);
 
-                result.EstaGuardado = await _destinoRepository.AnyAsync(d => d.IdAPI == id);
+   
+                var destinoLocal = await _destinoRepository.FirstOrDefaultAsync(d => d.IdAPI == id);
 
-                // Registrar éxito
+                if (destinoLocal != null)
+                {
+                    result.EstaGuardado = true;
+                    result.Id = destinoLocal.Id; 
+            
+ 
+                }
+
                 await RegistrarMetricaAsync("ObtenerDestinoPorId", $"id:{id}", sw, true);
 
                 return result;
             }
             catch (Exception ex)
             {
-                // Registrar fallo
                 await RegistrarMetricaAsync("ObtenerDestinoPorId", $"id:{id}", sw, false, ex.Message);
                 throw;
             }
