@@ -1,0 +1,25 @@
+# 1. Imagen base para compilar (SDK)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# 2. Copiar todo el código fuente
+COPY . .
+
+# 3. Restaurar dependencias y publicar el proyecto Host
+# Asegúrate de que la ruta coincida con la tuya. 
+# Generalmente es src/TuProyecto.HttpApi.Host/TuProyecto.HttpApi.Host.csproj
+WORKDIR "/src/TurisTrack.HttpApi.Host"
+RUN dotnet publish -c Release -o /app/publish
+
+# 4. Imagen final para ejecutar (Runtime)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# 5. Instalar librerías gráficas (necesario si ABP usa procesamiento de imágenes/Captcha)
+RUN apt-get update && apt-get install -y libgdiplus
+
+# 6. Exponer puerto y ejecutar
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
+ENTRYPOINT ["dotnet", "TurisTrack.HttpApi.Host.dll"]
