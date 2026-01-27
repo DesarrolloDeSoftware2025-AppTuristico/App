@@ -72,19 +72,25 @@ public class TurisTrackHttpApiHostModule : AbpModule
             });
         });
 
-        if (!hostingEnvironment.IsDevelopment())
-        {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                options.AddDevelopmentEncryptionAndSigningCertificate = false;
-            });
+        //if (!hostingEnvironment.IsDevelopment())
+        //{
+        //    PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        //    {
+        //        options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        //    });
 
-            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
-            {
-                serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
-                serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
-            });
-        }
+        //    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+        //    {
+        //        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        //        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
+        //    });
+        //}
+
+        PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+        {
+            serverBuilder.AddDevelopmentEncryptionCertificate();
+            serverBuilder.AddDevelopmentSigningCertificate();
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
