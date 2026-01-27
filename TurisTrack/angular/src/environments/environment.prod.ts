@@ -1,16 +1,15 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4200';
+const baseUrl = 'https://app-zeta-snowy-53.vercel.app/';
 
 const oAuthConfig = {
-  issuer: 'https://localhost:44340/',
+  issuer: 'https://turistrack.onrender.com',
   redirectUri: baseUrl,
   clientId: 'TurisTrack_Swagger',
   responseType: 'code',
   scope: 'TurisTrack',
   requireHttps: true,
 };
-
 
 export const environment = {
   production: true,
@@ -21,7 +20,7 @@ export const environment = {
   oAuthConfig,
   apis: {
     default: {
-      url: 'https://localhost:44340',
+      url: 'https://turistrack.onrender.com',
       rootNamespace: 'TurisTrack',
     },
     AbpAccountPublic: {
@@ -31,6 +30,6 @@ export const environment = {
   },
   remoteEnv: {
     url: '/getEnvConfig',
-    mergeStrategy: 'deepmerge'
-  }
+    mergeStrategy: 'deepmerge',
+  },
 } as Environment;
