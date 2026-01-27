@@ -17,7 +17,7 @@ public class TurisTrackDbContextFactory : IDesignTimeDbContextFactory<TurisTrack
         TurisTrackEfCoreEntityExtensionMappings.Configure();
 
         var builder = new DbContextOptionsBuilder<TurisTrackDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            .UseNpgsql(configuration.GetConnectionString("Default"));
         
         return new TurisTrackDbContext(builder.Options);
     }

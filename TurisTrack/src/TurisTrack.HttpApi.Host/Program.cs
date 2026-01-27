@@ -16,7 +16,7 @@ public class Program
             .WriteTo.Async(c => c.File("Logs/logs.txt"))
             .WriteTo.Async(c => c.Console())
             .CreateBootstrapLogger();
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         try
         {
             Log.Information("Starting TurisTrack.HttpApi.Host.");

@@ -1,25 +1,25 @@
-# 1. Imagen base para compilar (SDK)
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# ETAPA 1: Construcción (Build)
+# Usamos la imagen SDK que tiene todas las herramientas para compilar
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# 2. Copiar todo el código fuente
+# Copiamos TODO el código fuente de la solución al contenedor
+# (Es necesario copiar todo porque HttpApi.Host depende de Domain, Application, etc.)
 COPY . .
 
-# 3. Restaurar dependencias y publicar el proyecto Host
-# Asegúrate de que la ruta coincida con la tuya. 
-# Generalmente es src/TuProyecto.HttpApi.Host/TuProyecto.HttpApi.Host.csproj
-WORKDIR "/src/TurisTrack.HttpApi.Host"
-RUN dotnet publish -c Release -o /app/publish
+# Restauramos dependencias y compilamos el proyecto específico
+# IMPORTANTE: Verifica que la ruta a tu .csproj sea correcta.
+# En ABP suele ser src/Nombre.HttpApi.Host/Nombre.HttpApi.Host.csproj
+RUN dotnet publish "src/TurisTrack.HttpApi.Host/TurisTrack.HttpApi.Host.csproj" -c Release -o /app/publish
 
-# 4. Imagen final para ejecutar (Runtime)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+# ETAPA 2: Ejecución (Runtime)
+# Usamos una imagen más ligera solo para correr la app
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# 5. Instalar librerías gráficas (necesario si ABP usa procesamiento de imágenes/Captcha)
-RUN apt-get update && apt-get install -y libgdiplus
+# Configuración para Render (Render asigna puertos dinámicos, pero expone el 8080 por defecto en .NET 8/9)
+ENV ASPNETCORE_HTTP_PORTS=8080
+EXPOSE 8080
 
-# 6. Exponer puerto y ejecutar
-ENV ASPNETCORE_URLS=http://+:80
-EXPOSE 80
 ENTRYPOINT ["dotnet", "TurisTrack.HttpApi.Host.dll"]
