@@ -1,0 +1,55 @@
+// 1. Fondo de toda la pantalla (Gradiente moderno)
+.profile-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  // Opción alternativa (más "TurisTrack"):
+  // background: linear-gradient(135deg, #1fa2ff 0%, #12d8fa 50%, #a6ffcb 100%);
+}
+
+// 2. La Tarjeta
+.profile-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 1rem; // Bordes bien redondeados
+  overflow: hidden;    // Para que la portada no se salga de los bordes
+  background-color: #fff;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px); // Pequeña animación al pasar el mouse
+  }
+}
+
+// 3. Portada (Cover)
+.profile-cover {
+  height: 150px; // Altura de la barra de color superior
+  background: linear-gradient(to right, #ff9966, #ff5e62); // Gradiente cálido de atardecer
+  // O puedes poner una imagen de fondo genérica de viajes:
+  // background-image: url('https://source.unsplash.com/random/800x600/?travel,landscape');
+  // background-size: cover;
+}
+
+// 4. Contenedor del Avatar (para posicionarlo)
+.avatar-container {
+  width: 140px;
+  height: 140px;
+  margin-top: -70px; // ESTO ES CLAVE: Lo sube para que pise la portada
+  position: relative;
+  z-index: 10;
+}
+
+// Estilos compartidos para Foto e Iniciales
+.profile-img, .profile-initials {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #fff; // Fondo blanco por si la imagen es transparente
+}
+
+// Estilo específico para las Iniciales
+.profile-initials {
+  background: linear-gradient(45deg, #2193b0, #6dd5ed); // Gradiente azulado
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}

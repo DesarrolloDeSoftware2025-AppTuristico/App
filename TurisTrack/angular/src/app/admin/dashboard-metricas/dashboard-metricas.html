@@ -1,0 +1,76 @@
+<div class="metrics-dashboard">
+  <div class="dashboard-header">
+    <h1>📊 Monitoreo de API Externa (GeoDB)</h1>
+    <button class="btn-refresh" (click)="cargarMetricas()" [disabled]="loading">
+      <span *ngIf="!loading">🔄 Actualizar</span>
+      <span *ngIf="loading">⏳ Cargando...</span>
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Cargando métricas...</p>
+  </div>
+
+  <div class="metrics-container" *ngIf="!loading && metricas">
+    <!-- Fila Principal - Métricas Clave -->
+    <div class="metrics-grid">
+      <div class="metric-card card-primary">
+        <div class="card-icon">📈</div>
+        <div class="card-content">
+          <p class="card-label">Total de Peticiones</p>
+          <h2 class="card-value">{{ metricas.totalPeticiones | number }}</h2>
+        </div>
+      </div>
+
+      <div class="metric-card card-success">
+        <div class="card-icon">✅</div>
+        <div class="card-content">
+          <p class="card-label">Peticiones Exitosas</p>
+          <h2 class="card-value">{{ metricas.peticionesExitosas | number }}</h2>
+          <small class="card-percentage">{{ (metricas.peticionesExitosas / metricas.totalPeticiones * 100) | number:'1.1-2' }}%</small>
+        </div>
+      </div>
+
+      <div class="metric-card card-danger">
+        <div class="card-icon">❌</div>
+        <div class="card-content">
+          <p class="card-label">Peticiones Fallidas</p>
+          <h2 class="card-value">{{ metricas.peticionesFallidas | number }}</h2>
+          <small class="card-percentage">{{ metricas.tasaErroresPorcentaje | number:'1.1-2' }}%</small>
+        </div>
+      </div>
+
+      <div class="metric-card card-warning">
+        <div class="card-icon">⏱️</div>
+        <div class="card-content">
+          <p class="card-label">Tiempo Promedio</p>
+          <h2 class="card-value">{{ metricas.tiempoPromedioMs | number:'1.0-0' }} ms</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila Secundaria - Endpoint Más Lento -->
+    <div class="metric-detail-card" *ngIf="metricas.endpointMasLento">
+      <div class="detail-header">
+        <span class="detail-icon">🐢</span>
+        <h3>Endpoint Más Lento</h3>
+      </div>
+      <div class="detail-content">
+        <code class="endpoint-path">{{ metricas.endpointMasLento }}</code>
+      </div>
+    </div>
+
+    <!-- Resumen de Métricas -->
+    <div class="metrics-summary">
+      <div class="summary-row">
+        <span class="summary-label">Tasa de Error:</span>
+        <span class="summary-value error-rate">{{ metricas.tasaErroresPorcentaje | number:'1.1-2' }}%</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Tasa de Éxito:</span>
+        <span class="summary-value success-rate">{{ (100 - metricas.tasaErroresPorcentaje) | number:'1.1-2' }}%</span>
+      </div>
+    </div>
+  </div>
+</div>
