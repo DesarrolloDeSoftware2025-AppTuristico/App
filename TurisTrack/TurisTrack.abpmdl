@@ -1,0 +1,97 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "4.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "TurisTrack.Application": {
+      "path": "src/TurisTrack.Application/TurisTrack.Application.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.Application.Tests": {
+      "path": "test/TurisTrack.Application.Tests/TurisTrack.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "TurisTrack.Domain.Shared": {
+      "path": "src/TurisTrack.Domain.Shared/TurisTrack.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.Application.Contracts": {
+      "path": "src/TurisTrack.Application.Contracts/TurisTrack.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.HttpApi": {
+      "path": "src/TurisTrack.HttpApi/TurisTrack.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.HttpApi.Client": {
+      "path": "src/TurisTrack.HttpApi.Client/TurisTrack.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.EntityFrameworkCore.Tests": {
+      "path": "test/TurisTrack.EntityFrameworkCore.Tests/TurisTrack.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "TurisTrack.EntityFrameworkCore": {
+      "path": "src/TurisTrack.EntityFrameworkCore/TurisTrack.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.TestBase": {
+      "path": "test/TurisTrack.TestBase/TurisTrack.TestBase.abppkg",
+      "folder": "test"
+    },
+    "TurisTrack.Domain.Tests": {
+      "path": "test/TurisTrack.Domain.Tests/TurisTrack.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "TurisTrack.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/TurisTrack.HttpApi.Client.ConsoleTestApp/TurisTrack.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "TurisTrack.DbMigrator": {
+      "path": "src/TurisTrack.DbMigrator/TurisTrack.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.HttpApi.Host": {
+      "path": "src/TurisTrack.HttpApi.Host/TurisTrack.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "TurisTrack.Domain": {
+      "path": "src/TurisTrack.Domain/TurisTrack.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

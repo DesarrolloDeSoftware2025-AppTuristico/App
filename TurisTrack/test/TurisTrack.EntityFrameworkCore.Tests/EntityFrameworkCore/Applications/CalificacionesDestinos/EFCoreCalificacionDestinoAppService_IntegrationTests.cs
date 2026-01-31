@@ -1,0 +1,11 @@
+﻿using TurisTrack.CalificacionesDestinos;
+using Xunit;
+
+namespace TurisTrack.EntityFrameworkCore.Applications.CalificacionesDestinos
+{
+    [Collection(TurisTrackTestConsts.CollectionDefinitionName)]
+
+    public class EFCoreCalificacionDestinoAppService_IntegrationTests : CalificacionDestinoAppService_IntegrationTests<TurisTrackEntityFrameworkCoreTestModule>
+    {
+    }
+}

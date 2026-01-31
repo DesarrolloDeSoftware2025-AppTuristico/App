@@ -1,0 +1,142 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title m-0">
+        <i class="fas fa-map-marked-alt me-2"></i>
+        {{ '::Menu:Destinations' | abpLocalization }}
+      </h1>
+    </div>
+
+    <div class="card-body">
+
+      <!-- BUSCADOR -->
+      <div class="search-container">
+
+        <!-- Nombre -->
+        <div class="search-field">
+          <label>{{ '::Destinations:SearchQuery' | abpLocalization }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchParams.query"
+            (keyup.enter)="onSearch()"
+            placeholder="Buscar por nombre..."
+          />
+        </div>
+
+        <!-- País -->
+        <div class="search-field">
+          <label>{{ '::Destinations:Country' | abpLocalization }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchParams.country"
+            (keyup.enter)="onSearch()"
+            placeholder="Ej: Argentina"
+          />
+        </div>
+
+        <!--  Región (NUEVO) -->
+        <div class="search-field">
+          <label>Región</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchParams.region"
+            (keyup.enter)="onSearch()"
+            placeholder="Ej: Patagonia"
+          />
+        </div>
+
+        <!--  Población mínima (NUEVO) -->
+        <div class="search-field">
+          <label>Población mínima</label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="searchParams.minPopulation"
+            (keyup.enter)="onSearch()"
+            placeholder="Ej: 50000"
+          />
+        </div>
+
+        <!-- Botones -->
+        <div class="search-actions">
+          <button class="btn btn-primary" (click)="onSearch()">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button class="btn btn-secondary" (click)="clearSearch()">
+            <i class="fa fa-times"></i> Limpiar
+          </button>
+        </div>
+
+      </div>
+
+      <!-- CARGANDO -->
+      <div class="loading-overlay" *ngIf="loading">
+        <div class="spinner-border text-primary"></div>
+      </div>
+
+      <!-- GRID DE DATOS (SIN IMÁGENES) -->
+      <div class="destinations-grid" *ngIf="!loading && pagedDestinations.length > 0">
+
+        <div class="destination-card" 
+     *ngFor="let destination of pagedDestinations"
+     [routerLink]="['/destinos', destination.idAPI]"
+     style="cursor: pointer; transition: transform 0.2s;"
+     (mouseover)="this.style.transform='scale(1.02)'" 
+     (mouseout)="this.style.transform='scale(1)'">
+
+          <div class="destination-content">
+
+            <h3 class="destination-name">{{ destination.nombre }}</h3>
+
+            <div class="destination-info">
+
+              <div class="info-row">
+                <span class="info-label">País:</span>
+                <span class="info-value">{{ destination.pais }}</span>
+              </div>
+
+              <div class="info-row">
+                <span class="info-label">Región:</span>
+                <span class="info-value">{{ destination.region || 'N/A' }}</span>
+              </div>
+
+              <div class="info-row">
+                <span class="info-label">Población:</span>
+                <span class="info-value">{{ formatPopulation(destination.poblacion) }}</span>
+              </div>
+
+              <div class="info-row">
+                <span class="info-label">Coordenadas:</span>
+                <span class="info-value">
+                  {{ formatCoordinates(destination.latitud, destination.longitud) }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VACÍO -->
+      <div class="empty-state" *ngIf="!loading && pagedDestinations.length === 0">
+        <i class="fa fa-search fa-3x mb-3"></i>
+        <h4>No se encontraron resultados</h4>
+        <p>Probá cambiando los filtros o mostrando todos los destinos.</p>
+      </div>
+
+      <!-- PAGINACIÓN -->
+      <div class="mt-4 d-flex justify-content-center" *ngIf="pagedDestinations.length > 0">
+        <ngb-pagination
+          [collectionSize]="totalCount"
+          [page]="currentPage"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)">
+        </ngb-pagination>
+      </div>
+
+    </div>
+  </div>
+</div>
