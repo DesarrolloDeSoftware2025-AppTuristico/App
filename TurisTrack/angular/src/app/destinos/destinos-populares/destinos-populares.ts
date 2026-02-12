@@ -31,6 +31,8 @@ export class DestinosPopulares implements OnInit {
     // Validación simple para no enviar negativos o cero
     if (this.cantidad < 1) this.cantidad = 1;
 
+    if (this.cantidad > 10) this.cantidad = 10;
+
     this.loading = true;
     
     // 4. Usamos la variable 'this.cantidad' en lugar del 10 fijo

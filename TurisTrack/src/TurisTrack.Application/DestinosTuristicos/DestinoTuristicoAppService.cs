@@ -103,7 +103,7 @@ namespace TurisTrack.DestinosTuristicos
         }
 
         //  3.4 Listar destinos populares (API externa) - CON MONITOREO
-        public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10) // Eliminé "limit = 10" si ya estaba definido en la interfaz, pero aquí lo dejo por defecto
+        public async Task<List<DestinoTuristicoDto>> ListarDestinosPopularesAsync(int limit = 10)
         {
             var sw = Stopwatch.StartNew();
             try

@@ -129,12 +129,12 @@
         
         <div class="card border-0 shadow-sm mb-4 bg-primary text-white">
             <div class="card-body text-center">
-                <h1 class="display-3 fw-bold mb-0">{{ resumen.promedio }}</h1>
+                <h1 class="display-3 fw-bold mb-0 text-white">{{ resumen.promedio }}</h1>
                 <div class="text-warning mb-2 fs-4">
                      <i class="fa fa-star" *ngFor="let s of [1,2,3,4,5]" 
-                        [ngClass]="{'text-white': s <= mathRound(resumen.promedio), 'text-white-50': s > mathRound(resumen.promedio)}"></i>
+                        [ngClass]="{'text-yellow-50': s <= mathRound(resumen.promedio), 'text-white-50': s > mathRound(resumen.promedio)}"></i>
                 </div>
-                <p class="mb-0 small opacity-75">{{ resumen.totalCalificaciones }} valoraciones totales</p>
+                <p class="mb-0 small opacity-75 text-white">{{ resumen.totalCalificaciones }} valoraciones totales</p>
             </div>
         </div>
 
